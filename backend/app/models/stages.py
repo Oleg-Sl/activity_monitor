@@ -10,14 +10,14 @@ from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 
-from .base import Base
+from ..db.db import Base
 
 
 class Stages(Base):
     __tablename__ = "stages"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    entity_id: Mapped[str] = mapped_column(String(50))
+    entity_id: Mapped[str | None] = mapped_column(String(50))
     category_id: Mapped[int]
     status_id: Mapped[str] = mapped_column(String(50))
     name: Mapped[str] = mapped_column(String(100))

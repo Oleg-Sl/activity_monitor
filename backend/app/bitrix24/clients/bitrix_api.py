@@ -8,7 +8,7 @@ from . import bitrix_token
 adapters.DEFAULT_RETRIES = 10
 
 
-class Bitrix24:
+class BitrixClient:
     api_url = 'https://%s/rest/%s.json'
     oauth_url = 'https://oauth.bitrix.info/oauth/token/'
     timeout = 60

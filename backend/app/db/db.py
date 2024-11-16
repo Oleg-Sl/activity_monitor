@@ -1,5 +1,6 @@
 from sqlalchemy.orm import DeclarativeBase
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
+from collections.abc import AsyncGenerator
 
 
 engine = create_async_engine("sqlite+aiosqlite://", echo=True)
@@ -11,6 +12,6 @@ class Base(DeclarativeBase):
     pass
 
 
-async def get_async_session():
+async def get_async_session() -> AsyncGenerator[AsyncSession]:
     async with async_session_maker() as session:
         yield session
