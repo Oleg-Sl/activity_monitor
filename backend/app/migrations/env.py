@@ -7,7 +7,9 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from alembic import context
 
-from app.db.models.base import Base
+from app.models.stages import Stages
+from app.models.bitrix_settings import BitrixSettings
+from app.db.db import Base
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

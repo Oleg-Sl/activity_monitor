@@ -22,25 +22,6 @@ class StageService:
         })
 
         for stage in result.get("result", []):
-            # pprint(stage)
             yield BitrixStageSchema(**stage)
         
-
-
-# async def sync_stages(entity_id, ):
-#     api = BitrixWebhook()
-#     result = await api.call("crm.status.list", {
-#         "filter": {
-#             "ENTITY_ID": entity_id
-#         },
-#         "order": {
-#             "ID": "DESC"
-#         },
-#     })
-#     pprint(result)
-#     for stage in result.get("result", []):
-#         stage_data = BitrixStageSchema(**stage)
-
-#         # pprint(stage_data.model_dump())
-
 
