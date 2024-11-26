@@ -11,6 +11,7 @@ def get_application() -> FastAPI:
         title="PROJECT_NAME",
         debug=True,
         version="1.0.0",
+        root_path="/monitoractivity",
     )
     # application.include_router(get_apps_router())
 
@@ -37,4 +38,4 @@ async def test():
 
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8888, reload=True)
+    uvicorn.run("app:app", host="0.0.0.0", port=8888, reload=True)
