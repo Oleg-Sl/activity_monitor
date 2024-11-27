@@ -13,20 +13,16 @@ class BitrixSettingsFormSchema(BaseModel):
     refresh_token: str = Field(..., validation_alias='REFRESH_ID')
 
 
-class BitrixSettingsQuerySchema(BaseModel):
-    model_config = ConfigDict(populate_by_name=True)
-
-    domain: str = Field(..., validation_alias='DOMAIN')
-    refresh_token: str = Field(..., validation_alias='APP_SID')
-
 # from app.schemas.bitrix.settings import BitrixSettingsFormSchema
 
 # from api.dependencies import UOWDep
 # from schemas.tasks import TaskSchemaAdd, TaskSchemaEdit
 # from services.tasks import TasksService
 
+
 logging.basicConfig(level=logging.INFO, filename="request.log",
                     format="%(asctime)s %(levelname)s %(message)s")
+
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
@@ -38,20 +34,14 @@ async def index(request: Request) -> HTMLResponse:
 
 
 @router.post("/install", response_class=HTMLResponse)
-async def install(request: Request, DOMAIN: Annotated[str, Query()], data: Annotated[BitrixSettingsFormSchema, Form()]) -> HTMLResponse:
-    logging.info("install")
+async def install(
+    request: Request,
+    DOMAIN: Annotated[str, Query()],
+    data: Annotated[BitrixSettingsFormSchema, Form()]
+) -> HTMLResponse:
     logging.info({
         "DOMAIN": DOMAIN,
         "auth_token": data.auth_token,
         "refresh_token": data.refresh_token
     })
-    # logging.info(request.query_params)
-    # logging.info(data)
     return templates.TemplateResponse(request=request, name="install.html")
-
-
-# @app.get("/items/{id}", response_class=HTMLResponse)
-# async def read_item(request: Request, id: str):
-#     return templates.TemplateResponse(
-#         request=request, name="item.html", context={"id": id}
-#     )
