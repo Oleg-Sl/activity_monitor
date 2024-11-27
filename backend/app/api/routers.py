@@ -3,9 +3,17 @@ from typing import Annotated
 from fastapi import APIRouter, Request, Body, Form
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+from pydantic import BaseModel, ConfigDict, Field
 
 
-from app.schemas.bitrix.settings import BitrixSettingsFormSchema
+class BitrixSettingsFormSchema(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
+    auth_token: str = Field(..., validation_alias='AUTH_ID')
+    refresh_token: str = Field(..., validation_alias='REFRESH_ID')
+
+
+# from app.schemas.bitrix.settings import BitrixSettingsFormSchema
 
 # from api.dependencies import UOWDep
 # from schemas.tasks import TaskSchemaAdd, TaskSchemaEdit
