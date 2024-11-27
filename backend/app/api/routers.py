@@ -1,6 +1,6 @@
 import logging
 from typing import Annotated
-from fastapi import APIRouter, Request, Body, Form
+from fastapi import APIRouter, Request, Query, Form
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, ConfigDict, Field
@@ -12,6 +12,12 @@ class BitrixSettingsFormSchema(BaseModel):
     auth_token: str = Field(..., validation_alias='AUTH_ID')
     refresh_token: str = Field(..., validation_alias='REFRESH_ID')
 
+
+class BitrixSettingsQuerySchema(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
+    domain: str = Field(..., validation_alias='DOMAIN')
+    refresh_token: str = Field(..., validation_alias='APP_SID')
 
 # from app.schemas.bitrix.settings import BitrixSettingsFormSchema
 
@@ -32,10 +38,15 @@ async def index(request: Request) -> HTMLResponse:
 
 
 @router.post("/install", response_class=HTMLResponse)
-async def install(request: Request, data: Annotated[BitrixSettingsFormSchema, Form()]) -> HTMLResponse:
+async def install(request: Request, DOMAIN: Annotated[str, Query()], data: Annotated[BitrixSettingsFormSchema, Form()]) -> HTMLResponse:
     logging.info("install")
-    logging.info(request.query_params)
-    logging.info(data)
+    logging.info({
+        "DOMAIN": DOMAIN,
+        "auth_token": data.auth_token,
+        "refresh_token": data.refresh_token
+    })
+    # logging.info(request.query_params)
+    # logging.info(data)
     return templates.TemplateResponse(request=request, name="install.html")
 
 
