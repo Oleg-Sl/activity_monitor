@@ -3,7 +3,6 @@ from typing import Annotated
 from fastapi import APIRouter, Request, Body, Form
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-from pydantic import BaseModel
 
 
 from app.schemas.bitrix.settings import BitrixSettingsFormSchema

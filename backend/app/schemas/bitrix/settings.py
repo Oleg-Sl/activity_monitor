@@ -4,10 +4,8 @@ from pydantic import BaseModel, ConfigDict, Field
 class BitrixSettingsFormSchema(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
-    auth_token: str = Field(..., validation_alias='ENTITY_ID')
-    refresh_token: int | None = Field(..., validation_alias='CATEGORY_ID')
-
-
+    auth_token: str = Field(..., validation_alias='AUTH_ID')
+    refresh_token: str = Field(..., validation_alias='REFRESH_ID')
 
     # id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     # domain: Mapped[str] = mapped_column(String(100))
