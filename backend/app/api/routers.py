@@ -15,12 +15,12 @@ router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
 
-@router.get("/index", response_class=HTMLResponse)
+@router.post("/index", response_class=HTMLResponse)
 async def index(request: Request) -> HTMLResponse:
     return templates.TemplateResponse(request=request, name="index.html")
 
 
-@router.get("/install", response_class=HTMLResponse)
+@router.post("/install", response_class=HTMLResponse)
 async def install(request: Request, data = Body()) -> HTMLResponse:
     logging.info("install")
     logging.info(request)
