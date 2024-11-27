@@ -1,10 +1,15 @@
-from fastapi import APIRouter, Request
+import logging
+from fastapi import APIRouter, Request, Body
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+
 
 # from api.dependencies import UOWDep
 # from schemas.tasks import TaskSchemaAdd, TaskSchemaEdit
 # from services.tasks import TasksService
+
+logging.basicConfig(level=logging.INFO, filename="request.log",
+                    format="%(asctime)s %(levelname)s %(message)s")
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
@@ -16,7 +21,9 @@ async def index(request: Request) -> HTMLResponse:
 
 
 @router.get("/install", response_class=HTMLResponse)
-async def install(request: Request) -> HTMLResponse:
+async def install(request: Request, data = Body()) -> HTMLResponse:
+    logging.info("install")
+    logging.info(request)
     return templates.TemplateResponse(request=request, name="install.html")
 
 
