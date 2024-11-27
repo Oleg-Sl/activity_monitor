@@ -23,7 +23,8 @@ async def index(request: Request) -> HTMLResponse:
 @router.post("/install", response_class=HTMLResponse)
 async def install(request: Request, data = Body()) -> HTMLResponse:
     logging.info("install")
-    logging.info(request)
+    logging.info(data)
+    logging.info(request.body())
     return templates.TemplateResponse(request=request, name="install.html")
 
 
