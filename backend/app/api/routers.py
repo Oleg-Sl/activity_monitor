@@ -1,8 +1,12 @@
 import logging
-from fastapi import APIRouter, Request, Body
+from typing import Annotated
+from fastapi import APIRouter, Request, Body, Form
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+from pydantic import BaseModel
 
+
+from app.schemas.bitrix.settings import BitrixSettingsFormSchema
 
 # from api.dependencies import UOWDep
 # from schemas.tasks import TaskSchemaAdd, TaskSchemaEdit
@@ -21,10 +25,10 @@ async def index(request: Request) -> HTMLResponse:
 
 
 @router.post("/install", response_class=HTMLResponse)
-async def install(request: Request, data = Body()) -> HTMLResponse:
+async def install(request: Request, data: Annotated[BitrixSettingsFormSchema, Form()]) -> HTMLResponse:
     logging.info("install")
+    logging.info(request.query_params)
     logging.info(data)
-    logging.info(request.body())
     return templates.TemplateResponse(request=request, name="install.html")
 
 
