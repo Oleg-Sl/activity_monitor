@@ -89,7 +89,7 @@ export default class Templates {
                     <div class="bx24_events__name_event">
                         <label for="name_event__selectTypeEvent" class="form-label">Название события</label>
                         <select class="form-select" aria-label="Default select example" id="name_event__selectTypeEvent">
-                            ${getOptionsHTML(eventsList)}
+                            ${this.getOptionsHTML(eventsList)}
                         </select>    
                     </div>
                     <div class="bx24_events__handler_event">
