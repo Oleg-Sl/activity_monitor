@@ -10824,3 +10824,7 @@ WHERE entities.id = $1::INTEGER
 2025-03-23 19:34:47,970 INFO COMMIT
 2025-03-23 19:34:48,449 INFO Job "task_wrapper (trigger: interval[0:02:00], next run at: 2025-03-23 12:36:47 UTC)" executed successfully
 2025-03-23 19:35:14,247 INFO Scheduler has been shut down
+2025-03-23 19:35:31,603 INFO Running job "lifespan.<locals>.<lambda> (trigger: interval[0:10:00], next run at: 2025-03-23 19:35:31 +07)" (scheduled at 2025-03-23 19:35:31.560843+07:00)
+2025-03-23 19:35:31,603 INFO Job "lifespan.<locals>.<lambda> (trigger: interval[0:10:00], next run at: 2025-03-23 19:45:31 +07)" executed successfully
+2025-03-23 19:45:31,580 INFO Running job "lifespan.<locals>.<lambda> (trigger: interval[0:10:00], next run at: 2025-03-23 19:55:31 +07)" (scheduled at 2025-03-23 19:45:31.560843+07:00)
+2025-03-23 19:45:31,581 INFO Job "lifespan.<locals>.<lambda> (trigger: interval[0:10:00], next run at: 2025-03-23 19:55:31 +07)" executed successfully

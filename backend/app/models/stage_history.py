@@ -27,7 +27,7 @@ class StageHistory(Base):
     # stage_id: Mapped[str] = mapped_column(String(255), ForeignKey('stages.status_id'))
     stage_id: Mapped[int] = mapped_column(Integer, ForeignKey('stages.id'))
     start_time: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), comment='Время перевода на стадию')
-    end_time: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), comment='Время завершения нахождения на стадии')
+    end_time: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), comment='Время завершения нахождения на стадии')
     work_time: Mapped[timedelta] = mapped_column(Interval, default=timedelta(0), comment='Время на стадии, только рабочее время')
     non_work_time: Mapped[timedelta] = mapped_column(Interval, default=timedelta(0), comment='Время нахождения на стадии')
 

@@ -27,13 +27,13 @@ class Entities(Base):
     __tablename__ = 'entities'
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, comment="")
-    title: Mapped[str | None] = mapped_column(String(255))
+    title: Mapped[Optional[str]] = mapped_column(String(255))
     created_time: Mapped[datetime] = mapped_column(DateTime(timezone=True), comment="Когда создан")
     updated_time: Mapped[datetime] = mapped_column(DateTime(timezone=True), comment="Когда обновлён")
     created_by: Mapped[int] = mapped_column(Integer, comment="Кем создан")
     assigned_by_id: Mapped[int] = mapped_column(Integer, comment="Ответственный")
-    company_id: Mapped[int | None] = mapped_column(Integer, comment="Компания")
-    category_id: Mapped[int | None] = mapped_column(Integer, comment="Воронка")
+    company_id: Mapped[Optional[int]] = mapped_column(Integer, comment="Компания")
+    category_id: Mapped[Optional[int]] = mapped_column(Integer, comment="Воронка")
 
     moved_time: Mapped[datetime] = mapped_column(DateTime(timezone=True), comment="Когда передвинут")
     moved_by: Mapped[int] = mapped_column(Integer, comment="Кем передвинут")
@@ -42,9 +42,9 @@ class Entities(Base):
     stage_id: Mapped[int] = mapped_column(Integer, ForeignKey('stages.id'), comment="Стадия")
 
     previous_stage_id: Mapped[str] = mapped_column(String(255), comment="Предыдущая стадия")
-    opportunity: Mapped[float | None] = mapped_column(Float, comment="Сумма")
-    product_id: Mapped[int | None] = mapped_column(Integer, comment="ID_изделия_смарт")
-    product_type: Mapped[int | None] = mapped_column(Integer, comment="Тип изделия")
+    opportunity: Mapped[Optional[float]] = mapped_column(Float, comment="Сумма")
+    product_id: Mapped[Optional[int]] = mapped_column(Integer, comment="ID_изделия_смарт")
+    product_type: Mapped[Optional[int]] = mapped_column(Integer, comment="Тип изделия")
 
     stage_history = relationship("StageHistory", back_populates="entity")
 
