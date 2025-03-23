@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from collections.abc import AsyncGenerator
 from pydantic import BaseModel, ValidationError
+from typing import List, Optional
 
 from app.schemas.stage import StageSchema
 from app.schemas.entity import EntitySchema
@@ -28,7 +29,7 @@ class InterfaceBitrixClient(ABC):
                 print(f"Ошибка валидации данных: {e}")
                 continue
 
-    async def get_entities(self, entityTypeId: str, filter_params: dict | None = None) -> AsyncGenerator[EntitySchema, None]:
+    async def get_entities(self, entityTypeId: str, filter_params: Optional[dict] = None) -> AsyncGenerator[EntitySchema, None]:
         if filter_params is None:
             filter_params = {}
 
@@ -77,7 +78,7 @@ class InterfaceBitrixClient(ABC):
                         print(f"Ошибка валидации данных: {e}")
                         continue
 
-    async def get_offline_events(self, event_name: str, limit: int | None = 50) -> list[int]:
+    async def get_offline_events(self, event_name: str, limit: Optional[int] = 50) -> list[int]:
         response = await self.call("event.offline.get", {
             "filter": {
                 "EVENT_NAME": event_name
