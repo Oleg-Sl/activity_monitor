@@ -10828,3 +10828,13 @@ WHERE entities.id = $1::INTEGER
 2025-03-23 19:35:31,603 INFO Job "lifespan.<locals>.<lambda> (trigger: interval[0:10:00], next run at: 2025-03-23 19:45:31 +07)" executed successfully
 2025-03-23 19:45:31,580 INFO Running job "lifespan.<locals>.<lambda> (trigger: interval[0:10:00], next run at: 2025-03-23 19:55:31 +07)" (scheduled at 2025-03-23 19:45:31.560843+07:00)
 2025-03-23 19:45:31,581 INFO Job "lifespan.<locals>.<lambda> (trigger: interval[0:10:00], next run at: 2025-03-23 19:55:31 +07)" executed successfully
+2025-03-23 19:55:31,571 INFO Running job "lifespan.<locals>.<lambda> (trigger: interval[0:10:00], next run at: 2025-03-23 20:05:31 +07)" (scheduled at 2025-03-23 19:55:31.560843+07:00)
+2025-03-23 19:55:31,571 INFO Job "lifespan.<locals>.<lambda> (trigger: interval[0:10:00], next run at: 2025-03-23 20:05:31 +07)" executed successfully
+2025-03-23 20:05:31,576 INFO Running job "lifespan.<locals>.<lambda> (trigger: interval[0:10:00], next run at: 2025-03-23 20:15:31 +07)" (scheduled at 2025-03-23 20:05:31.560843+07:00)
+2025-03-23 20:05:31,579 INFO Job "lifespan.<locals>.<lambda> (trigger: interval[0:10:00], next run at: 2025-03-23 20:15:31 +07)" executed successfully
+2025-03-23 20:15:31,579 INFO Running job "lifespan.<locals>.<lambda> (trigger: interval[0:10:00], next run at: 2025-03-23 20:25:31 +07)" (scheduled at 2025-03-23 20:15:31.560843+07:00)
+2025-03-23 20:15:31,579 INFO Job "lifespan.<locals>.<lambda> (trigger: interval[0:10:00], next run at: 2025-03-23 20:25:31 +07)" executed successfully
+2025-03-23 20:25:31,568 INFO Running job "lifespan.<locals>.<lambda> (trigger: interval[0:10:00], next run at: 2025-03-23 20:35:31 +07)" (scheduled at 2025-03-23 20:25:31.560843+07:00)
+2025-03-23 20:25:31,569 INFO Job "lifespan.<locals>.<lambda> (trigger: interval[0:10:00], next run at: 2025-03-23 20:35:31 +07)" executed successfully
+2025-03-23 20:35:31,566 INFO Running job "lifespan.<locals>.<lambda> (trigger: interval[0:10:00], next run at: 2025-03-23 20:45:31 +07)" (scheduled at 2025-03-23 20:35:31.560843+07:00)
+2025-03-23 20:35:31,566 INFO Job "lifespan.<locals>.<lambda> (trigger: interval[0:10:00], next run at: 2025-03-23 20:45:31 +07)" executed successfully
