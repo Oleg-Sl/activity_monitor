@@ -2,7 +2,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 
-class BitrixStageSchema(BaseModel):
+class StageSchema(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
     id: int = Field(..., validation_alias='ID')
@@ -11,3 +11,4 @@ class BitrixStageSchema(BaseModel):
     status_id: str = Field(..., validation_alias='STATUS_ID')
     name: str = Field(..., validation_alias='NAME')
     semantic: str | None = Field(..., validation_alias='SEMANTICS')
+

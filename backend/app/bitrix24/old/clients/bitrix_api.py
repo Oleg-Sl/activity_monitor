@@ -49,7 +49,6 @@ class BitrixClient:
             r = post(url, data=json.dumps(params), headers=headers, timeout=self.timeout)
             result = json.loads(r.text)
         except ValueError:
-            pass
             result = dict(error='Error on decode api response [%s]' % r.text)
         except exceptions.ReadTimeout:
             result = dict(error='Timeout waiting expired [%s sec]' % str(self.timeout))

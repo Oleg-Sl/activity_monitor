@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 # from ..bitrix24.services.stage import BitrixStageSchema
 from ..bitrix24.services.stages import StageService
 from ..bitrix24.clients.bitrix_interface import InterfaceBitrixClient
-from ..models.stages import Stages
+from ..models.stage import Stages
 
 
 class SyncService:

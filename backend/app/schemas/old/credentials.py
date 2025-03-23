@@ -1,7 +1,7 @@
 from pydantic import BaseModel, ConfigDict, Field
 
 
-class BitrixSettingsFormSchema(BaseModel):
+class BitrixCredentialsFormSchema(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
     auth_token: str = Field(..., validation_alias='AUTH_ID')
