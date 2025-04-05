@@ -1,7 +1,7 @@
 print("settings.py loaded")
 
 import logging
-from typing import Annotated
+from typing import Annotated, Optional
 from fastapi import APIRouter, Request, Query, Form
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
@@ -10,6 +10,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from app.api.dependencies import UOWDep
 from app.services.credentials import CredentialsService
 from app.tasks.registry import TASKS
+
 
 
 router = APIRouter(
@@ -34,7 +35,7 @@ async def add_taks(
 @router.post("/status", summary="Получить статус задачи")
 async def get_status_taks(
     task_type: str,
-    task_id: dict | None
+    task_id: str
 ):
     return {"OK": True}
 
@@ -42,7 +43,7 @@ async def get_status_taks(
 @router.post("/remove", summary="Удалить задачу")
 async def remove_taks(
     task_type: str,
-    task_id: dict | None
+    task_id: str
 ):
     
     return {"OK": True}
