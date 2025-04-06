@@ -42,12 +42,13 @@ class EntityRepository(AbstractRepository):
 
 
     async def create_or_update(self, data: dict) -> int:
-        print('# Получение записи, если она уже сохранена в БД')
+        print('# Получение записи, если она уже сохранена в БД: ', data)
         try:
             # Получение записи, если она уже сохранена в БД
             stmt = select(Entities).where(Entities.id == data['id'])
             result = await self.session.execute(stmt)
             old_row = result.scalars().first()
+            print('# old_row: ', old_row)
 
             # создание или обновление записи
             # if not old_row:

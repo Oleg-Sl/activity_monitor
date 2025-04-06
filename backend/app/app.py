@@ -98,7 +98,7 @@ async def test():
 
 # alembic init migrations
 # alembic revision --message="Initial" --autogenerate
-# alembic revision --autogenerate -m "Initial migration"
+# alembic revision --autogenerate -m "Change type of column stage_id to str"
 # alembic upgrade head
 
 # from app.models.stages import Stages

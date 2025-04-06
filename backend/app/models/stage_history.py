@@ -24,7 +24,7 @@ class StageHistory(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     entity_id: Mapped[int] = mapped_column(Integer, ForeignKey('entities.id'))
-    # stage_id: Mapped[str] = mapped_column(String(255), ForeignKey('stages.status_id'))
+    # stage_id: Mapped[str] = mapped_column(String(255), ForeignKey('stages.status_id'))    # не можем использовать т.к. должен быть уникальным, а он бывает одинаковым
     stage_id: Mapped[int] = mapped_column(Integer, ForeignKey('stages.id'))
     start_time: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), comment='Время перевода на стадию')
     end_time: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), comment='Время завершения нахождения на стадии')

@@ -18,11 +18,13 @@ class EntitySchema(BaseModel):
 
     moved_time: Optional[datetime] = Field(..., validation_alias='movedTime')
     moved_by: Optional[int] = Field(..., validation_alias='movedBy')
-    stage_id: Optional[str] = Field(..., validation_alias='stageId')
+    stage_id: Optional[int] = Field(...)
+    stage_id_str: Optional[str] = Field(..., validation_alias='stageId')
     previous_stage_id: Optional[str] = Field(..., validation_alias='previousStageId')
+
     opportunity: Optional[float] = Field(..., validation_alias='opportunity')
     product_id: Optional[int] = Field(..., validation_alias='ufCrm21_1726480119')
-    product_id: Optional[int] = Field(..., validation_alias='ufCrm21_1726637267')
+    product_type: Optional[int] = Field(..., validation_alias='ufCrm21_1726637267')
 
 
 

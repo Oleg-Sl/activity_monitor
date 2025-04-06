@@ -1,8 +1,8 @@
-"""Initial migration
+"""Initial
 
-Revision ID: 560197b6ece3
+Revision ID: 1803ecf3917d
 Revises: 
-Create Date: 2025-03-09 16:04:44.966369
+Create Date: 2025-04-06 20:49:19.699838
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '560197b6ece3'
+revision: str = '1803ecf3917d'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -39,6 +39,7 @@ def upgrade() -> None:
     sa.Column('semantic', sa.String(length=5), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
+    op.create_index(op.f('ix_stages_status_id'), 'stages', ['status_id'], unique=False)
     op.create_table('work_calendar',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('date', sa.Date(), nullable=False),
@@ -61,6 +62,7 @@ def upgrade() -> None:
     sa.Column('moved_time', sa.DateTime(timezone=True), nullable=False, comment='Когда передвинут'),
     sa.Column('moved_by', sa.Integer(), nullable=False, comment='Кем передвинут'),
     sa.Column('stage_id', sa.Integer(), nullable=False, comment='Стадия'),
+    sa.Column('stage_id_str', sa.String(length=255), nullable=False, comment='Стадия абревиатура'),
     sa.Column('previous_stage_id', sa.String(length=255), nullable=False, comment='Предыдущая стадия'),
     sa.Column('opportunity', sa.Float(), nullable=True, comment='Сумма'),
     sa.Column('product_id', sa.Integer(), nullable=True, comment='ID_изделия_смарт'),
@@ -88,6 +90,7 @@ def downgrade() -> None:
     op.drop_table('stage_history')
     op.drop_table('entities')
     op.drop_table('work_calendar')
+    op.drop_index(op.f('ix_stages_status_id'), table_name='stages')
     op.drop_table('stages')
     op.drop_table('credentials')
     # ### end Alembic commands ###

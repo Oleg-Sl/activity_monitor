@@ -36,6 +36,7 @@ class BitrixEntityEventFetcher:
         self.bitrix_client = bitrix_client
 
     async def fetch_events(self, event_name: str, limit_events: int) -> list[EntitySchema]:
+
         events = await self.bitrix_client.get_offline_events(event_name, limit_events)
         entity_ids = [event.get("FIELDS", {}).get("ID") for event in events if event.get("FIELDS", {}).get("ID")]
         logger.info(events)
@@ -66,14 +67,15 @@ class EntitySaver:
                 break
 
             for entity in entities:
-                print('>>> entity = ', entity)
-                self.entity_repository.create_or_update(entity)
+                # print('>>> entity11111 = ', type(entity), entity)
+                await self.entity_repository.create_or_update(entity.model_dump())
 
             cnt -= 1
             if len(entities) < self.limit_events:
                 break
 
             await asyncio.sleep(TIMEOUT)
+            break
 
 
 # получение данных из очереди событий
@@ -84,13 +86,18 @@ async def event_entities_task():
         event_fetcher = BitrixEntityEventFetcher(bitrix_client)
         event_saver = EntitySaver(entity_repository, event_fetcher)
 
-        await event_saver.save_entities('ONCRMDYNAMICITEMADD')
-        await event_saver.save_entities('ONCRMDYNAMICITEMUPDATE')
+        await event_saver.save_entities('ONCRMDYNAMICITEMADD_166')
+        await event_saver.save_entities('ONCRMDYNAMICITEMUPDATE_166')
+        # print("*"*88)
+        # events = await bitrix_client.get_offline_events('ONCRMDYNAMICITEMADD_166', 1)
+        # events = await bitrix_client.get_offline_events('ONCRMDYNAMICITEMUPDATE_166', 1)
+        # print("events = ", events)
+
 
 
 if __name__ == "__main__":
     asyncio.run(event_entities_task())
 
 
-# python -m app.tasks.sync_entities
+# python -m app.tasks.event_entities
 # .\venv\Scripts\activate

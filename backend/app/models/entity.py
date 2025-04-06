@@ -37,11 +37,12 @@ class Entities(Base):
 
     moved_time: Mapped[datetime] = mapped_column(DateTime(timezone=True), comment="Когда передвинут")
     moved_by: Mapped[int] = mapped_column(Integer, comment="Кем передвинут")
-    # stage_id: Mapped[str] = mapped_column(String(255), description="Стадия")
-    # stage_id: Mapped[str] = mapped_column(String(255), ForeignKey('stages.status_id'), comment="Стадия")
+    # stage_id: Mapped[int] = mapped_column(Integer, description="Стадия")
+    # stage_id: Mapped[str] = mapped_column(String(255), ForeignKey('stages.status_id'), comment="Стадия")    # не можем использовать т.к. должен быть уникальным, а он бывает одинаковым
     stage_id: Mapped[int] = mapped_column(Integer, ForeignKey('stages.id'), comment="Стадия")
-
+    stage_id_str: Mapped[str] = mapped_column(String(255), comment="Стадия абревиатура")
     previous_stage_id: Mapped[str] = mapped_column(String(255), comment="Предыдущая стадия")
+
     opportunity: Mapped[Optional[float]] = mapped_column(Float, comment="Сумма")
     product_id: Mapped[Optional[int]] = mapped_column(Integer, comment="ID_изделия_смарт")
     product_type: Mapped[Optional[int]] = mapped_column(Integer, comment="Тип изделия")
