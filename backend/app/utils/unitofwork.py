@@ -3,7 +3,7 @@ print("unitofwork.py loaded")
 from abc import ABC, abstractmethod
 from typing import Type
 
-from app.repositories.credentials import BitrixCredentialsRepository
+from app.repositories.credentials import CredentialRepository
 from app.db.db import async_session_maker
 
 
@@ -11,7 +11,7 @@ class IUnitOfWork(ABC):
     # users: Type[UsersRepository]
     # tasks: Type[TasksRepository]
     # task_history: Type[TaskHistoryRepository]
-    credentials: Type[BitrixCredentialsRepository]
+    credentials: Type[CredentialRepository]
     
     @abstractmethod
     def __init__(self):
@@ -40,7 +40,7 @@ class UnitOfWork:
 
     async def __aenter__(self):
         self.session = self.session_factory()
-        self.credentials = BitrixCredentialsRepository(self.session)
+        self.credentials = CredentialRepository(self.session)
         return self
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):

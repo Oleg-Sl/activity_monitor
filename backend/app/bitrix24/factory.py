@@ -11,3 +11,4 @@ def get_bitrix_client(session: AsyncSession) -> InterfaceBitrixClient:
     credential_repository = CredentialRepository(session)
     return TokenBitrixClient(credential_repository)
 
+
