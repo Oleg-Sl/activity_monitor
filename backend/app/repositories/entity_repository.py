@@ -3,6 +3,7 @@ from sqlalchemy import insert, select, update
 from sqlalchemy import and_
 
 from app.models.entity import Entities, save_stage_history
+from app.models.stage import Stages
 from app.repositories.base import AbstractRepository
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -42,13 +43,19 @@ class EntityRepository(AbstractRepository):
 
 
     async def create_or_update(self, data: dict) -> int:
-        print('# Получение записи, если она уже сохранена в БД: ', data)
+        # print('# Получение записи, если она уже сохранена в БД: ', data)
         try:
+            stmt = select(Stages.id).where(Stages.status_id == data['stage_id_str'])
+            result = await self.session.execute(stmt)
+            stage_id = result.scalar_one_or_none()
+            
+            if stage_id is not None:
+                data['stage_id'] = stage_id
+
             # Получение записи, если она уже сохранена в БД
             stmt = select(Entities).where(Entities.id == data['id'])
             result = await self.session.execute(stmt)
             old_row = result.scalars().first()
-            print('# old_row: ', old_row)
 
             # создание или обновление записи
             # if not old_row:
@@ -56,17 +63,29 @@ class EntityRepository(AbstractRepository):
             # else:
             #     stmt = update(Entities).where(Entities.id == data['id']).values(**data).returning(Entities.id)
 
+            old_row_data = None
+            if old_row:
+                old_row_data = {
+                    "stage_id": old_row.stage_id
+                }
+
             if not old_row:
                 stmt = insert(Entities).values(**data).returning(Entities).execution_options(synchronize_session="fetch")
             else:
                 stmt = update(Entities).where(Entities.id == data['id']).values(**data).returning(Entities).execution_options(synchronize_session="fetch")
 
             result = await self.session.execute(stmt)
-            await self.session.commit()
+            # await self.session.commit()
+            await self.session.flush()
             new_row = result.scalar_one()
 
+            # print('old_row >>> ', old_row_data)
+            # print('new_row >>> ', new_row)
+
             # добавление записи в историю изменения стадий
-            await save_stage_history(self.session, new_row, old_row)
+            await save_stage_history(self.session, new_row, old_row_data)
+
+            await self.session.commit()
 
             return new_row.id
         except SQLAlchemyError as e:

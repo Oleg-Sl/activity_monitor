@@ -5,7 +5,7 @@ from typing import Optional
 
 
 class EntitySchema(BaseModel):
-    model_config = ConfigDict(populate_by_name=True)
+    model_config = ConfigDict(populate_by_name=True, extra="ignore")
 
     id: int = Field(..., validation_alias='id')
     title: str = Field(..., validation_alias='title')
@@ -18,7 +18,7 @@ class EntitySchema(BaseModel):
 
     moved_time: Optional[datetime] = Field(..., validation_alias='movedTime')
     moved_by: Optional[int] = Field(..., validation_alias='movedBy')
-    stage_id: Optional[int] = Field(...)
+    stage_id: Optional[int] = Field(None)
     stage_id_str: Optional[str] = Field(..., validation_alias='stageId')
     previous_stage_id: Optional[str] = Field(..., validation_alias='previousStageId')
 

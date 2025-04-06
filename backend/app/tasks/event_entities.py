@@ -39,9 +39,9 @@ class BitrixEntityEventFetcher:
 
         events = await self.bitrix_client.get_offline_events(event_name, limit_events)
         entity_ids = [event.get("FIELDS", {}).get("ID") for event in events if event.get("FIELDS", {}).get("ID")]
-        logger.info(events)
-        print(">>> events = ", events)
-        print(">>> entity_ids = ", entity_ids)
+        # logger.info(events)
+        # print(">>> events = ", events)
+        # print(">>> entity_ids = ", entity_ids)
 
         if not entity_ids:
             return []
@@ -61,8 +61,8 @@ class EntitySaver:
 
         while cnt > 0:
             entities = await self.event_service.fetch_events(event_name, self.limit_events)
-            logger.info(entities)
-            print('>>> entities = ', entities)
+            # logger.info(entities)
+            # print('>>> entities = ', entities)
             if not entities:
                 break
 
@@ -86,7 +86,7 @@ async def event_entities_task():
         event_fetcher = BitrixEntityEventFetcher(bitrix_client)
         event_saver = EntitySaver(entity_repository, event_fetcher)
 
-        await event_saver.save_entities('ONCRMDYNAMICITEMADD_166')
+        # await event_saver.save_entities('ONCRMDYNAMICITEMADD_166')
         await event_saver.save_entities('ONCRMDYNAMICITEMUPDATE_166')
         # print("*"*88)
         # events = await bitrix_client.get_offline_events('ONCRMDYNAMICITEMADD_166', 1)

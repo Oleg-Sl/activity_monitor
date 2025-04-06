@@ -35,7 +35,7 @@ class StageHistory(Base):
     stage = relationship("Stages", back_populates="stage_history")
 
     def __repr__(self) -> str:
-        return f"<StageHistory(id={self.id}, title={self.title}, created_time={self.created_time})>"
+        return f"<StageHistory(id={self.id}, entity_id={self.entity_id}, stage_id={self.stage_id}, start_time={self.start_time}, end_time={self.end_time})>"
 
 
 async def calculate_work_time(session: AsyncSession, start_time: datetime, end_time: datetime) -> timedelta:
@@ -46,7 +46,8 @@ async def calculate_work_time(session: AsyncSession, start_time: datetime, end_t
     current_time = start_time
 
     while current_time < end_time:
-        day_end = datetime.combine(current_time.date(), time(23, 59, 59))
+        day_end = datetime.combine(current_time.date(), time(23, 59, 59)).replace(tzinfo=current_time.tzinfo)
+        # day_end = datetime.combine(current_time.date(), time(23, 59, 59))
 
         # work_calendar = (
         #     session.query(WorkCalendar)
@@ -88,6 +89,7 @@ async def update_stage_durations(session: AsyncSession, stage_history: StageHist
         stage_history.non_work_time = non_work_time
         
         await session.flush()
+
 
 # async def before_stage_history_change(mapper, connection, target):
 #     session = inspect(target).async_session

@@ -67,14 +67,13 @@ class Entities(Base):
     # work_start_date: Mapped[datetime | None] = mapped_column(DateTime, description="Дата старта (принят в работу)")
 
     def __repr__(self):
-        return f"<BitrixEntity(id={self.id}, title={self.title}, created_time={self.created_time})>"
+        return f"<BitrixEntity(id={self.id}, title={self.title}, created_time={self.created_time}, stage_id_str={self.stage_id_str}, stage_id={self.stage_id})>"
 
 
-async def save_stage_history(session: AsyncSession, new_entity: Entities, old_entity: Entities):
-    if old_entity is not None and new_entity.stage_id == old_entity.stage_id:
+async def save_stage_history(session: AsyncSession, new_entity: Entities, old_entity: dict):
+    if old_entity is not None and new_entity.stage_id == old_entity['stage_id']:
         return
 
-    print("!!!!!new_entity = ", new_entity)
     result = await session.execute(
         select(StageHistory)
         .filter(StageHistory.entity_id == new_entity.id)
@@ -97,8 +96,10 @@ async def save_stage_history(session: AsyncSession, new_entity: Entities, old_en
 
     await update_stage_durations(session, last_history_stage)
 
+  
     # await session.flush()
     # session.add(new_history_entry)
+    # await self.session.commit()
 
 
 

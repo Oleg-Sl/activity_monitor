@@ -86,7 +86,7 @@ class InterfaceBitrixClient(ABC):
             "order": {"TIMESTAMP_X": "ASC"},
             "limit": limit
         })
-        print('response = ', response)
+        # print('response = ', response)
 
         if "error" in response:
             print(response.get("error"))
