@@ -1,3 +1,5 @@
+import os
+import logging
 import asyncio
 
 from app.bitrix24.factory import get_bitrix_client
@@ -5,6 +7,22 @@ from app.bitrix24.bitrix_client import InterfaceBitrixClient
 from app.db.db import async_session_maker
 from app.schemas.entity import EntitySchema
 from app.repositories.entity_repository import EntityRepository
+
+
+# Создание директории logs, если её нет
+os.makedirs("logs", exist_ok=True)
+
+# Настройка логгирования
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+    handlers=[
+        logging.FileHandler("logs/sync_entities.log", encoding="utf-8"),
+        logging.StreamHandler()
+    ]
+)
+
+logger = logging.getLogger(__name__)
 
 
 ENTITY_TYPE_ID = 166    # ID смартпроцесса производство
@@ -18,8 +36,9 @@ class BitrixEntityEventFetcher:
         self.bitrix_client = bitrix_client
 
     async def fetch_events(self, event_name: str, limit_events: int) -> list[EntitySchema]:
-        events = self.bitrix_client.get_offline_events(event_name, limit_events)
+        events = await self.bitrix_client.get_offline_events(event_name, limit_events)
         entity_ids = [event.get("FIELDS", {}).get("ID") for event in events if event.get("FIELDS", {}).get("ID")]
+        logger.info(events)
 
         if not entity_ids:
             return []
@@ -39,6 +58,7 @@ class EntitySaver:
 
         while cnt > 0:
             entities = await self.event_service.fetch_events(event_name, self.limit_events)
+            logger.info(entities)
             if not entities:
                 break
 
