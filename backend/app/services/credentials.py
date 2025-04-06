@@ -2,7 +2,7 @@
 # from utils.repository import AbstractRepository
 from app.utils.unitofwork import IUnitOfWork
 from app.schemas.credentials import CredentialsFormSchema, BitrixClientSchema
-from app.repositories.credentials import BitrixCredentialsRepository
+# from app.repositories.credentials import BitrixCredentialsRepository
 
 
 # class ClientsService:
