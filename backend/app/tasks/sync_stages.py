@@ -8,9 +8,9 @@ from app.repositories.stage_repository import StageRepository
 async def sync_stages_task():
     async with async_session_maker() as session:
         repository = StageRepository(session)
-        bitrix_client = get_bitrix_client()
+        bitrix_client = get_bitrix_client(session)
         async for stage in bitrix_client.get_stages():
-            print(stage)
+            print('STAGE = ', stage)
             stage_id = await repository.create_or_update(stage.model_dump())
 
 

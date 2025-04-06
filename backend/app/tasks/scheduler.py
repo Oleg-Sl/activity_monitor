@@ -1,6 +1,7 @@
 import asyncio
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.jobstores.base import JobLookupError
+from apscheduler.triggers.cron import CronTrigger
 from pytz import utc
 from typing import Callable, Any
 import logging
@@ -21,9 +22,9 @@ TASKS = {
     "update_calendar": {
         "func": update_calendar_task,
         "description": "Update status of days",
-        "trigger": "interval",
+        "trigger": CronTrigger(month=1, day=1, hour=1, minute=7),
         "params": {
-            "months": 1
+            # "months": 1
         }
     },
     "sync_stages": {
@@ -34,20 +35,20 @@ TASKS = {
             "weeks": 1
         }
     },
-    "sync_entities": {
-        "func": sync_entities_task,
-        "description": "Sync the entities of the database with bitrix24.",
-        "trigger": "interval",
-        "params": {
-            "minutes": 2
-        }
-    },
+    # "sync_entities": {
+    #     "func": sync_entities_task,
+    #     "description": "Sync the entities of the database with bitrix24.",
+    #     "trigger": "interval",
+    #     "params": {
+    #         "minutes": 2
+    #     }
+    # },
     "event_entities": {
         "func": event_entities_task,
         "description": "Get event of entities and save it to the database with bitrix24.",
         "trigger": "interval",
         "params": {
-            "minutes": 1
+            "minutes": 2
         }
     },
 }

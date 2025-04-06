@@ -65,8 +65,14 @@ async def test():
     return {"test": 111}
 
 
+# ssl_certificate /etc/nginx/ssl/web/database_tamamm_ru.crt;
+# ssl_certificate_key /etc/nginx/ssl/web/database_tamamm_ru.key;
 
-
+# ssl_certificate /etc/nginx/ssl/web/designers.tamamm.ru.crt;
+# ssl_certificate_key /etc/nginx/ssl/web/designers.tamamm.ru.key;
+# ssl_dhparam /etc/nginx/ssl/web/designers.tamamm.ru.dhparam.pem;
+# ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
+# ssl_ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:HIG>    ssl_prefer_server_ciphers on;
 
 
 
@@ -88,6 +94,7 @@ async def test():
 # python app.py
 # backend\venv\Scripts\activate.bat
 # uvicorn app.app:app --host 0.0.0.0 --port 8000 --reload --log-level debug
+# uvicorn app.app:app --host 0.0.0.0 --port 8888 --reload --log-level debug
 
 # alembic init migrations
 # alembic revision --message="Initial" --autogenerate

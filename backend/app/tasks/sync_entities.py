@@ -17,7 +17,7 @@ async def sync_entities_task():
     async with async_session_maker() as session:
         repository = EntityRepository(session)
         stage_repository = StageRepository(session)
-        bitrix_client = get_bitrix_client()
+        bitrix_client = get_bitrix_client(session)
         filter_data = {
             # ">=createdTime": "",
             # "<=createdTime": "",

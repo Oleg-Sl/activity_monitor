@@ -3,7 +3,7 @@ from .sync_stages import sync_stages_task
 from .sync_entities import sync_entities_task
 from .event_entities import event_entities_task
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-# from app.jobs.sync_bitrix import sync_bitrix
+
 
 scheduler = AsyncIOScheduler()
 

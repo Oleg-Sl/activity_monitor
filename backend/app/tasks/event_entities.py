@@ -55,7 +55,7 @@ class EntitySaver:
 # получение данных из очереди событий
 async def event_entities_task():
     async with async_session_maker() as session:
-        bitrix_client = get_bitrix_client()
+        bitrix_client = get_bitrix_client(session)
         entity_repository = EntityRepository(session)
         event_fetcher = BitrixEntityEventFetcher(bitrix_client)
         event_saver = EntitySaver(entity_repository, event_fetcher)

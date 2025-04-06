@@ -53,6 +53,11 @@ async def remove_taks(
 # from api.tasks.scheduler import add_task, remove_task, scheduler, task_wrapper
 # from api.tasks.example_tasks import sample_task
 
+# sudo systemctl daemon-reload
+# sudo systemctl start uvicorn_monitoractivity
+# sudo systemctl status uvicorn_monitoractivity
+# sudo systemctl enable uvicorn_monitoractivity
+
 # router = APIRouter()
 
 # @router.post("/tasks/add", summary="Добавить задачу")

@@ -6,7 +6,10 @@ from app.db.db import async_session_maker
 from app.repositories.work_calendar import WorkCalendarRepository
 
 
-async def update_calendar_task(session: AsyncSession, year: int):
+async def update_calendar_task(session: AsyncSession, year: int = None):
+    if year is None:
+        year = datetime.now().year + 1
+
     try:
         WORK_START = datetime.time(8, 0)
         WORK_END = datetime.time(17, 0)
