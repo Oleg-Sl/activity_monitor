@@ -42,6 +42,7 @@ class EntityRepository(AbstractRepository):
 
 
     async def create_or_update(self, data: dict) -> int:
+        print('# Получение записи, если она уже сохранена в БД')
         try:
             # Получение записи, если она уже сохранена в БД
             stmt = select(Entities).where(Entities.id == data['id'])
