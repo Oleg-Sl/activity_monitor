@@ -42,6 +42,11 @@ async def calculate_work_time(session: AsyncSession, start_time: datetime, end_t
     if start_time is None or end_time is None:
         return timedelta(0)
 
+    if start_time.tzinfo is None:
+        start_time = start_time.replace(tzinfo=datetime.timezone.utc)
+    if end_time.tzinfo is None:
+        end_time = end_time.replace(tzinfo=datetime.timezone.utc)
+
     work_time = timedelta(0)
     current_time = start_time
 

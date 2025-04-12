@@ -85,7 +85,6 @@ async def save_stage_history(session: AsyncSession, new_entity: Entities, old_en
 
     print('last_history_stage = ', last_history_stage)
 
-
     # добавляем к последней записи в истории время завершения нахождения на стадии
     if last_history_stage:
         last_history_stage.end_time = new_entity.updated_time
