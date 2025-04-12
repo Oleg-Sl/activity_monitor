@@ -62,7 +62,7 @@ class EntitySaver:
         while cnt > 0:
             entities = await self.event_service.fetch_events(event_name, self.limit_events)
             # logger.info(entities)
-            # print('>>> entities = ', entities)
+            print('>>> entities = ', entities)
             if not entities:
                 break
 
