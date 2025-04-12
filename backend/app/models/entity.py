@@ -71,6 +71,8 @@ class Entities(Base):
 
 
 async def save_stage_history(session: AsyncSession, new_entity: Entities, old_entity: dict):
+    print('new_entity = ', new_entity)
+    print('old_entity = ', old_entity)
     if old_entity is not None and new_entity.stage_id == old_entity['stage_id']:
         return
 
@@ -80,6 +82,9 @@ async def save_stage_history(session: AsyncSession, new_entity: Entities, old_en
         .order_by(StageHistory.start_time.desc())
     )
     last_history_stage = result.scalars().first()
+
+    print('last_history_stage = ', last_history_stage)
+
 
     # добавляем к последней записи в истории время завершения нахождения на стадии
     if last_history_stage:

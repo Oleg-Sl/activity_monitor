@@ -86,7 +86,7 @@ async def event_entities_task():
         event_fetcher = BitrixEntityEventFetcher(bitrix_client)
         event_saver = EntitySaver(entity_repository, event_fetcher)
 
-        # await event_saver.save_entities('ONCRMDYNAMICITEMADD_166')
+        await event_saver.save_entities('ONCRMDYNAMICITEMADD_166')
         await event_saver.save_entities('ONCRMDYNAMICITEMUPDATE_166')
         # print("*"*88)
         # events = await bitrix_client.get_offline_events('ONCRMDYNAMICITEMADD_166', 1)

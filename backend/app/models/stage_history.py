@@ -81,7 +81,12 @@ async def update_stage_durations(session: AsyncSession, stage_history: StageHist
     if not session:
         raise RuntimeError("Сессия не найдена для объекта")
 
+    print('stage_history = ', stage_history)
+
     if stage_history and stage_history.start_time is not None and stage_history.end_time is not None:
+        print('stage_history.start_time = ', stage_history.start_time)
+        print('stage_history.end_time = ', stage_history.end_time)
+
         work_time = await calculate_work_time(session, stage_history.start_time, stage_history.end_time)
         non_work_time = (stage_history.end_time - stage_history.start_time) - work_time
 
