@@ -88,6 +88,7 @@ async def event_entities_task():
 
         await event_saver.save_entities('ONCRMDYNAMICITEMADD_166')
         await event_saver.save_entities('ONCRMDYNAMICITEMUPDATE_166')
+
         # print("*"*88)
         # events = await bitrix_client.get_offline_events('ONCRMDYNAMICITEMADD_166', 1)
         # events = await bitrix_client.get_offline_events('ONCRMDYNAMICITEMUPDATE_166', 1)

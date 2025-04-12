@@ -66,8 +66,11 @@ async def calculate_work_time(session: AsyncSession, start_time: datetime, end_t
         work_calendar = result.scalars().first()
 
         if work_calendar and work_calendar.is_working_day:
-            work_start = datetime.combine(current_time.date(), work_calendar.work_start)
-            work_end = datetime.combine(current_time.date(), work_calendar.work_end)
+            work_start = datetime.combine(current_time.date(), work_calendar.work_start).replace(tzinfo=current_time.tzinfo)
+            work_end = datetime.combine(current_time.date(), work_calendar.work_end).replace(tzinfo=current_time.tzinfo)
+
+            # work_start = datetime.combine(current_time.date(), work_calendar.work_start)
+            # work_end = datetime.combine(current_time.date(), work_calendar.work_end)
 
             if current_time < work_start:
                 current_time = work_start
