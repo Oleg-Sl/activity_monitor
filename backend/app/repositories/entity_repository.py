@@ -48,7 +48,8 @@ class EntityRepository(AbstractRepository):
             stmt = select(Stages.id).where(Stages.status_id == data['stage_id_str'])
             result = await self.session.execute(stmt)
             stage_id = result.scalar_one_or_none()
-            
+            print('>>> data = ', data)
+            print('>>> stage_id = ', stage_id)
             if stage_id is not None:
                 data['stage_id'] = stage_id
 
