@@ -2,7 +2,7 @@ import os
 import logging
 import asyncio
 import pprint
-from typing import List, Any
+from typing import List, Any, Optional
 from collections import defaultdict
 from logging.handlers import TimedRotatingFileHandler
 from pydantic import BaseModel, ConfigDict, Field, field_validator
@@ -67,8 +67,8 @@ TIMEOUT = 1             # пауза между выполняемыми зап�
 class ProductSchema(BaseModel):
     product_id: str
     product_type_str: str
-    fot_id: int | None = None
-    image: str | None = None
+    fot_id: Optional[int] = None
+    image: Optional[str] = None
 
 
 class EntityWorkshopService:
