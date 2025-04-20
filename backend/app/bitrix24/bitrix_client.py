@@ -1,3 +1,4 @@
+import pprint
 from abc import ABC, abstractmethod
 from collections.abc import AsyncGenerator
 from pydantic import BaseModel, ValidationError
@@ -29,7 +30,35 @@ class InterfaceBitrixClient(ABC):
                 print(f"Ошибка валидации данных: {e}")
                 continue
 
-    async def get_entities(self, entityTypeId: str, filter_params: Optional[dict] = None) -> AsyncGenerator[EntitySchema, None]:
+    # async def get_entities(self, entityTypeId: str, filter_params: Optional[dict] = None) -> AsyncGenerator[EntitySchema, None]:
+    #     if filter_params is None:
+    #         filter_params = {}
+
+    #     entity_id = 0
+    #     while True:
+    #         filter_params[">id"] = entity_id
+    #         response = await self.call("crm.item.list", {
+    #             "entityTypeId": entityTypeId,
+    #             "filter": filter_params,
+    #             "order": {
+    #                 "id": "ASC"
+    #             }
+    #         })
+
+    #         entities = response.get("result", {}).get("items", [])
+    #         if not entities:
+    #             break
+
+    #         for entity in entities:
+    #             try:
+    #                 yield EntitySchema(**entity)
+    #             except ValidationError as e:
+    #                 print(f"Ошибка валидации данных: {e}")
+    #                 continue
+
+    #         entity_id = entities[-1]["id"]
+
+    async def get_entities(self, entityTypeId: str, filter_params: Optional[dict] = None) -> AsyncGenerator[dict, None]:
         if filter_params is None:
             filter_params = {}
 
@@ -49,11 +78,12 @@ class InterfaceBitrixClient(ABC):
                 break
 
             for entity in entities:
-                try:
-                    yield EntitySchema(**entity)
-                except ValidationError as e:
-                    print(f"Ошибка валидации данных: {e}")
-                    continue
+                yield entity
+                # try:
+                #     yield EntitySchema(**entity)
+                # except ValidationError as e:
+                #     print(f"Ошибка валидации данных: {e}")
+                #     continue
 
             entity_id = entities[-1]["id"]
     
@@ -99,3 +129,31 @@ class InterfaceBitrixClient(ABC):
             for event in events
             if event.get("EVENT_DATA")
         ]
+
+    async def get_products(self, entityTypeId: str, filter_params: Optional[dict] = None) -> AsyncGenerator[EntitySchema, None]:
+        if filter_params is None:
+            filter_params = {}
+
+        entity_id = 0
+        while True:
+            filter_params[">id"] = entity_id
+            response = await self.call("crm.item.list", {
+                "entityTypeId": entityTypeId,
+                "filter": filter_params,
+                "order": {
+                    "id": "ASC"
+                }
+            })
+
+            entities = response.get("result", {}).get("items", [])
+            if not entities:
+                break
+
+            for entity in entities:
+                try:
+                    yield EntitySchema(**entity)
+                except ValidationError as e:
+                    print(f"Ошибка валидации данных: {e}")
+                    continue
+
+            entity_id = entities[-1]["id"]

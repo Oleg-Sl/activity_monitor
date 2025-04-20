@@ -47,6 +47,25 @@ class Entities(Base):
     product_id: Mapped[Optional[int]] = mapped_column(Integer, comment="ID_изделия_смарт")
     product_type: Mapped[Optional[int]] = mapped_column(Integer, comment="Тип изделия")
 
+    zakup_id: Mapped[Optional[int]] = mapped_column(Integer, comment="ID смарта закупки")
+    fabric_arrival_date: Mapped[Optional[str]] = mapped_column(String(255), comment="Дата прихода ткани")
+
+    name: Mapped[Optional[str]] = mapped_column(String(255), comment="Имя изделия")
+    product_type_str: Mapped[Optional[str]] = mapped_column(String(255), comment="Аббревиатура типа изделия")
+    image: Mapped[Optional[str]] = mapped_column(String(2048), comment="Фото изделия")
+    fot_id: Mapped[Optional[int]] = mapped_column(Integer, comment="ID смарта фот")
+
+    allocated_hours_development: Mapped[Optional[int]] = mapped_column(Integer, comment="Разработка - выделено часов")
+    allocated_hours_sawing: Mapped[Optional[int]] = mapped_column(Integer, comment="Пилка - выделено часов")
+    allocated_hours_assembly: Mapped[Optional[int]] = mapped_column(Integer, comment="Сборка - выделено часов")
+    allocated_hours_ppu: Mapped[Optional[int]] = mapped_column(Integer, comment="ППУ - выделено часов")
+    allocated_hours_sewing: Mapped[Optional[int]] = mapped_column(Integer, comment="Швейка - выделено часов")
+    allocated_hours_covering: Mapped[Optional[int]] = mapped_column(Integer, comment="Обтяжка - выделено часов")
+    allocated_hours_carpentry: Mapped[Optional[int]] = mapped_column(Integer, comment="Столярка - выделено часов")
+    allocated_hours_carpentry_assembly: Mapped[Optional[int]] = mapped_column(Integer, comment="Столярка (сборка) - выделено часов")
+    allocated_hours_painting_preparation: Mapped[Optional[int]] = mapped_column(Integer, comment="Покраска (подготовка) - выделено часов")
+    allocated_hours_painting: Mapped[Optional[int]] = mapped_column(Integer, comment="Покраска - выделено часов")
+
     stage_history = relationship("StageHistory", back_populates="entity")
 
 
@@ -106,12 +125,9 @@ async def save_stage_history(session: AsyncSession, new_entity: Entities, old_en
     # await self.session.commit()
 
 
-
-
-
-
-
-
+# alembic revision --autogenerate -m "initial"
+# alembic revision --autogenerate -m "Add fields to entity model"
+# alembic upgrade head
 
 
 

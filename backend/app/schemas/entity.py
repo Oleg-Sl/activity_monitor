@@ -1,4 +1,5 @@
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
+
 from datetime import datetime
 from typing import Optional
 
@@ -25,6 +26,32 @@ class EntitySchema(BaseModel):
     opportunity: Optional[float] = Field(..., validation_alias='opportunity')
     product_id: Optional[int] = Field(..., validation_alias='ufCrm21_1726480119')
     product_type: Optional[int] = Field(..., validation_alias='ufCrm21_1726637267')
+
+    zakup_id: Optional[int] = Field(..., validation_alias='ufCrm21_1727624055')
+    fabric_arrival_date: Optional[str] = Field(None)
+
+    name: Optional[str] = Field(None)
+    product_type_str: Optional[str] = Field(None)
+    image: Optional[str] = Field(None)
+    fot_id: Optional[int] = Field(None)
+
+    allocated_hours_development: Optional[float] = Field(None)
+    allocated_hours_sawing: Optional[float] = Field(None)
+    allocated_hours_assembly: Optional[float] = Field(None)
+    allocated_hours_ppu: Optional[float] = Field(None)
+    allocated_hours_sewing: Optional[float] = Field(None)
+    allocated_hours_covering: Optional[float] = Field(None)
+    allocated_hours_carpentry: Optional[float] = Field(None)
+    allocated_hours_carpentry_assembly: Optional[float] = Field(None)
+    allocated_hours_painting_preparation: Optional[float] = Field(None)
+    allocated_hours_painting: Optional[float] = Field(None)
+
+    @field_validator('zakup_id', mode='before')
+    def empty_str_to_none(cls, v):
+        if v == "" or v == "null" or v == "undefined":
+            return None
+        return v
+
 
 
 
@@ -63,5 +90,3 @@ class EntitySchema(BaseModel):
 #     # actual_ship_date: date = Field(validation_alias='ufCrm21_1711276851')      # Дата фактической отгрузки
 #     # forecast_ready_date: date = Field(validation_alias='ufCrm21_1734528164')   # Дата ПРОГНОЗ готовности
 #     # work_start_date: datetime  = Field(validation_alias='ufCrm21_1730035261')  # Дата старта (принят в работу)
-
-# 1  
