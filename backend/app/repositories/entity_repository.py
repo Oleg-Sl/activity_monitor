@@ -129,11 +129,12 @@ class EntityRepository(AbstractRepository):
             if current_stage:
                 total_time = now - current_stage.start_time
 
+            kanban_code = KANBAN_ITEMS.get(current_group, {}).get('code')
             result[current_group].append({
                 "id": entity.id,
                 "title": entity.title,
                 "name": entity.name,
-                "allocated_hours": getattr(entity, f'allocated_hours_{KANBAN_ITEMS.get(current_group, {}).get('code')}'),
+                "allocated_hours": getattr(entity, f'allocated_hours_{kanban_code}', None),
                 "stage_id": entity.stage_id,
                 "stage_str": entity.stage_id_str,
                 "stage_duration_seconds": total_time.total_seconds() if total_time else None,
