@@ -101,7 +101,7 @@ class EntityRepository(AbstractRepository):
             raise
 
     async def get_grouped_by_kanban(self) -> Dict[str, list]:
-        result = {key: {} for key in KANBAN_ITEMS}
+        result = {key: [] for key in KANBAN_ITEMS}
         now = datetime.now(timezone.utc)
 
         all_status_ids = sum((v['status_id'] for v in KANBAN_ITEMS.values()), [])
