@@ -101,7 +101,7 @@ class EntityRepository(AbstractRepository):
             raise
 
     async def get_grouped_by_kanban(self) -> Dict[str, list]:
-        result = {key: [] for key in KANBAN_ITEMS}
+        result = {key: {} for key in KANBAN_ITEMS}
         now = datetime.now(timezone.utc)
 
         all_status_ids = sum((v['status_id'] for v in KANBAN_ITEMS.values()), [])
@@ -139,7 +139,8 @@ class EntityRepository(AbstractRepository):
                 "stage_str": entity.stage_id_str,
                 "stage_duration_seconds": total_time.total_seconds() if total_time else None,
                 "stage_duration_human": str(total_time) if total_time else None,
-                "fabric_arrival_date": entity.fabric_arrival_date.isoformat() if entity.fabric_arrival_date else None,
+                # "fabric_arrival_date": entity.fabric_arrival_date.isoformat() if entity.fabric_arrival_date else None,
+                "fabric_arrival_date": entity.fabric_arrival_date,
                 "created_time": entity.created_time.date().isoformat(),
                 "updated_time": entity.updated_time.date().isoformat(),
                 "image": entity.image
