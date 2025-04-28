@@ -13,6 +13,7 @@ from app.services.credentials import CredentialsService
 from app.schemas.credentials import BitrixClientSchema
 from app.db.db import async_session_maker
 from app.repositories.entity_repository import EntityRepository
+from app.repositories.workorder_repository import WorkOrderRepository
 from app.repositories.stage_repository import StageRepository
 from app.models.stage import Stages
 from app.models.entity import Entities
@@ -40,6 +41,16 @@ async def client_data(
         await CredentialsService().edit_credential(uow, credentials[-1].id, data)
 
     return {"OK": True}
+
+
+@router.post("/workorder")
+async def get_entities(
+    uow: UOWDep
+):
+    async with async_session_maker() as session:
+        repository = WorkOrderRepository(session)
+        data = await repository.get_grouped_by_kanban()
+        return data
 
 
 @router.post("/entities")

@@ -2,6 +2,7 @@ from .update_calendar import update_calendar_task
 from .sync_stages import sync_stages_task
 from .sync_entities import sync_entities_task
 from .event_entities import event_entities_task
+from .event_workorder import event_workorder_task
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 
@@ -22,7 +23,7 @@ TASKS = {
         "description": "Sync the entities of the database with bitrix24."
     },
     "event_entities": {
-        "func": event_entities_task,
+        "func": event_workorder_task,
         "description": "Get event of entities and save it to the database with bitrix24."
     },
 }

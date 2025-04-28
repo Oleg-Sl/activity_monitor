@@ -1,3 +1,7 @@
+BASE_URL = 'http://127.0.0.1:8888'
+
+BASE_DIR = r'C:\projects\activity_monitor\backend'
+PATCH_TO_UPLOADS = r'static\uploads'
 
 KANBAN_ITEMS = {
     'expecting': {
@@ -5,7 +9,10 @@ KANBAN_ITEMS = {
         'code': 'development',
         'status_id': [
             'DT166_31:UC_HNUB5Y',
-            'DT166_31:CLIENT'
+            'DT166_31:CLIENT',
+            'DT166_29:NEW',
+            'DT166_29:3',
+            'DT166_29:16'
         ]
     },
     'readysawing': {

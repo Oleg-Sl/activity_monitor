@@ -53,6 +53,9 @@ class Entities(Base):
     name: Mapped[Optional[str]] = mapped_column(String(255), comment="Имя изделия")
     product_type_str: Mapped[Optional[str]] = mapped_column(String(255), comment="Аббревиатура типа изделия")
     image: Mapped[Optional[str]] = mapped_column(String(2048), comment="Фото изделия")
+    image: Mapped[Optional[str]] = mapped_column(String(2048), comment="Фото изделия")
+    # original_url = Column(String, nullable=False)
+    # local_url = Column(String, nullable=False)
     fot_id: Mapped[Optional[int]] = mapped_column(Integer, comment="ID смарта фот")
 
     allocated_hours_development: Mapped[Optional[int]] = mapped_column(Integer, comment="Разработка - выделено часов")

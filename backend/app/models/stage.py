@@ -10,7 +10,6 @@ from ..db.db import Base
 # from .stage_history import StageHistory
 
 
-
 class Stages(Base):
     ''' Стадии смартпроцесса - Цех
     '''

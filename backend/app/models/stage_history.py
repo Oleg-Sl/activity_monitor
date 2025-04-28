@@ -15,7 +15,6 @@ from sqlalchemy.future import select
 from datetime import datetime, date, timedelta, time
 
 from ..db.db import Base
-# from .entity import Entities
 from .work_calendar import WorkCalendar
 
 
@@ -23,7 +22,8 @@ class StageHistory(Base):
     __tablename__ = "stage_history"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    entity_id: Mapped[int] = mapped_column(Integer, ForeignKey('entities.id'))
+    entity_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey('entities.id'))
+    work_order_id: Mapped[int] = mapped_column(Integer, ForeignKey('work_order.id'))
     # stage_id: Mapped[str] = mapped_column(String(255), ForeignKey('stages.status_id'))    # не можем использовать т.к. должен быть уникальным, а он бывает одинаковым
     stage_id: Mapped[int] = mapped_column(Integer, ForeignKey('stages.id'))
     start_time: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), comment='Время перевода на стадию')
@@ -32,6 +32,7 @@ class StageHistory(Base):
     non_work_time: Mapped[timedelta] = mapped_column(Interval, default=timedelta(0), comment='Время нахождения на стадии')
 
     entity = relationship("Entities", back_populates="stage_history")
+    work_order = relationship("WorkOrder", back_populates="stage_history")
     stage = relationship("Stages", back_populates="stage_history")
 
     def __repr__(self) -> str:
@@ -102,6 +103,31 @@ async def update_stage_durations(session: AsyncSession, stage_history: StageHist
         stage_history.non_work_time = non_work_time
         
         await session.flush()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # async def before_stage_history_change(mapper, connection, target):

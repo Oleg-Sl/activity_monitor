@@ -14,7 +14,7 @@ async def sync_stages_task():
         repository = StageRepository(session)
         bitrix_client = get_bitrix_client(session)
         async for stage in bitrix_client.get_stages():
-            print('STAGE = ', stage)
+            # print('STAGE = ', stage)
             stage_id = await repository.create_or_update(stage.model_dump())
 
 

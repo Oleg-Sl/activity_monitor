@@ -152,6 +152,7 @@ class EntityProductService:
                 product_type_str, product_id = key.split('_')
                 product_meta = PRODUCT_TYPE_DATA[product_type_str]
                 product_data = items['items'][0]
+                print(product_data)
                 image = product_data.get(product_meta['fields']['image'], {}).get('urlMachine')
                 fot_id = product_data.get(product_meta['fields']['fot_id'])
                 result[product_type_str][product_id] = ProductSchema(
@@ -283,10 +284,10 @@ async def event_entities_task():
         event_fetcher = BitrixEntityEventFetcher(bitrix_client)
         event_saver = EntitySaver(entity_repository, event_fetcher)
 
-        await event_saver.save_entities('ONCRMDYNAMICITEMADD_166')
-        await event_saver.save_entities('ONCRMDYNAMICITEMUPDATE_166')
+        # await event_saver.save_entities('ONCRMDYNAMICITEMADD_166')
+        # await event_saver.save_entities('ONCRMDYNAMICITEMUPDATE_166')
 
-        # entities = await event_fetcher.fetch_data([3269, 3453, 3455, 2833])
+        entities = await event_fetcher.fetch_data([3269, 3453, 3455, 2833])
         # for entity in entities:
         #     print(entity)
 
