@@ -118,11 +118,13 @@ class WorkOrderRepository(AbstractRepository):
             print('entity.id = ', entity.id)
 
             stmt = select(StageHistory).where(
-                StageHistory.entity_id == entity.id,
+                StageHistory.work_order_id == entity.id,
                 StageHistory.end_time.is_(None)
             )
             stage_result = await self.session.execute(stmt)
+            print(stage_result)
             current_stage = stage_result.scalars().first()
+            print('current_stage = ', current_stage)
             total_time = None
             if current_stage:
                 total_time = now - current_stage.start_time
@@ -136,7 +138,7 @@ class WorkOrderRepository(AbstractRepository):
                 "stage_id": entity.stage_id,
                 "stage_str": entity.stage_id_str,
                 "stage_duration_seconds": total_time.total_seconds() if total_time else None,
-                "stage_duration_hours": (total_time.total_seconds() / 3600).toFixed(1) if total_time else None,
+                "stage_duration_hours": total_time.total_seconds() / 3600 if total_time else None,
                 # "stage_duration_human": str(total_time) if total_time else None,
                 "fabric_arrival_date": entity.fabric_arrival_date,
                 "image": f'{BASE_URL}/static/{entity.image_local_path}'
