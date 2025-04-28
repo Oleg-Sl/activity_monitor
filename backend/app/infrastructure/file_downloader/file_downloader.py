@@ -5,6 +5,7 @@ import re
 import asyncio
 from pathlib import Path
 from uuid import uuid4
+from typing import Optional
 
 from PIL import Image
 
@@ -19,7 +20,7 @@ class FileDownloader(IFileDownloader):
     async def download_file(
         self, 
         url: str, 
-        filename: str | None = None,
+        filename: Optional[str] = None,
         compress_image: bool = True,
         quality: int = 75
     ) -> str:
