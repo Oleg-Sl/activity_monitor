@@ -130,6 +130,7 @@ class WorkOrderRepository(AbstractRepository):
                 total_time = now - current_stage.start_time
 
             kanban_code = KANBAN_ITEMS.get(current_group, {}).get('code')
+            hours_left = (entity.allocated_hours - total_time.total_seconds() / 3600) if total_time and entity.allocated_hours else '-'
             result[current_group].append({
                 "id": entity.id,
                 # "title": entity.title,
@@ -140,6 +141,7 @@ class WorkOrderRepository(AbstractRepository):
                 "stage_str": entity.stage_id_str,
                 "stage_duration_seconds": total_time.total_seconds() if total_time else None,
                 "stage_duration_hours": total_time.total_seconds() / 3600 if total_time else None,
+                "hours_left": hours_left,
                 # "stage_duration_human": str(total_time) if total_time else None,
                 "fabric_arrival_date": entity.fabric_arrival_date,
                 "image": f'{BASE_URL}/static/{entity.image_local_path}'
