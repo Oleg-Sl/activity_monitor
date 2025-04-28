@@ -82,7 +82,7 @@ class WorkorderService:
             entity.image_local_path = image_data.get('image_path')
         return entity
 
-    async def uploads_image(self, url: str, old_image_token: str|None = None) -> dict:
+    async def uploads_image(self, url: str, old_image_token: Optional[str] = None) -> dict:
         relative_path = await self.file_service.save_file_from_url(
             url=url,
             old_image_token=old_image_token,
