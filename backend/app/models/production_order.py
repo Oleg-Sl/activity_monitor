@@ -45,7 +45,7 @@ class ProductionOrder(Base):
     image_token: Mapped[Optional[str]] = mapped_column(String(2048), comment="Уникальный токен фотографии изделия (из url)")
     image_local_path: Mapped[Optional[str]] = mapped_column(String(255), comment="Путь к фотографии на сервере")
 
-    production_date: Mapped[datetime] = mapped_column(DateTime(timezone=True), comment="Дата производства")
+    production_date: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), comment="Дата производства")
 
     allocated_hours: Mapped[Optional[float]] = mapped_column(Float, comment="Выделено часов на стадии")
 
