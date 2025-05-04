@@ -7,7 +7,6 @@ from collections.abc import AsyncGenerator
 engine = create_async_engine("postgresql+asyncpg://oleg:oleg@127.0.0.1:5432/oleg", echo=False)
 async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
 
-
 class Base(DeclarativeBase):
     pass
 

@@ -36,7 +36,7 @@ class ProductionOrderRepository(AbstractRepository):
             raise
 
     async def filter(self, *args):
-        stmt = select(ProductionOrder).where(and_(*args)).order_by(ProductionOrder.)
+        stmt = select(ProductionOrder).where(and_(*args)).order_by(ProductionOrder.production_date)
         result = await self.session.execute(stmt)
         return result.scalars().all()
 
