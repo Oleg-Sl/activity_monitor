@@ -1,0 +1,54 @@
+from typing import Optional
+from sqlalchemy import ForeignKey
+from sqlalchemy import String
+from sqlalchemy import Integer, String, Float, DateTime
+from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import relationship
+from sqlalchemy.orm import mapped_column, Mapped
+from datetime import datetime
+
+from app.db.session import Base
+
+
+class ProductionSchedule(Base):
+    __tablename__ = 'production_schedule'
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, comment="Идентификатор из битрикс")
+    title: Mapped[Optional[str]] = mapped_column(String(255), comment="Название смарт-процесса в битрикс")
+
+    created_time: Mapped[datetime] = mapped_column(DateTime(timezone=True), comment="Когда создан")
+    updated_time: Mapped[datetime] = mapped_column(DateTime(timezone=True), comment="Когда обновлён")
+
+    created_by: Mapped[int] = mapped_column(Integer, comment="Кем создан - числовой идентификатор")
+    assigned_by_id: Mapped[int] = mapped_column(Integer, comment="Ответственный -  числовой идентификатор")
+    category_id: Mapped[Optional[int]] = mapped_column(Integer, comment="Воронка - числовой идентификатор")
+
+    moved_time: Mapped[datetime] = mapped_column(DateTime(timezone=True), comment="Когда передвинут - числовой идентификатор")
+    moved_by: Mapped[int] = mapped_column(Integer, comment="Кем передвинут - числовой идентификатор")
+    stage_id: Mapped[int] = mapped_column(Integer, ForeignKey('stages.id'), comment="Стадия - числовой идентификатор")
+    stage_id_str: Mapped[str] = mapped_column(String(255), comment="Стадия - абревиатура")
+    previous_stage_id: Mapped[str] = mapped_column(String(255), comment="Предыдущая стадия - абревиатура")
+
+    product_id: Mapped[Optional[int]] = mapped_column(Integer, comment="ID смарта изделия")
+    product_type: Mapped[Optional[int]] = mapped_column(Integer, comment="Тип изделия - числовой код")
+
+    priority: Mapped[Optional[str]] = mapped_column(String(16), comment="Приоритет")
+    production_вate: Mapped[datetime] = mapped_column(DateTime(timezone=True), comment="Дата производства")
+
+    name: Mapped[Optional[str]] = mapped_column(String(255), comment="Имя изделия")
+    product_type_str: Mapped[Optional[str]] = mapped_column(String(255), comment="Аббревиатура типа изделия")
+
+    stage_histories = relationship("StageHistory", back_populates="production_schedule")
+
+    def __repr__(self):
+        return (
+            f"<ProductionSchedule(id={self.id}, "
+            f"title='{self.title}', "
+            f"stage_id_str='{self.stage_id_str}', "
+            f"name='{self.name}')>"
+        )
+
+# alembic revision --autogenerate -m "initial"
+# alembic revision --autogenerate -m "Add fields to entity model"
+# alembic upgrade head

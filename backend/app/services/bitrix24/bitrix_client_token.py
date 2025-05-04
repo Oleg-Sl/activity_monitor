@@ -4,7 +4,7 @@ import time
 from requests import post, adapters, exceptions
 
 from .bitrix_client import InterfaceBitrixClient
-from app.repositories.credentials import CredentialRepository
+from app.repositories.credential_repository import CredentialRepository
 
 
 adapters.DEFAULT_RETRIES = 10

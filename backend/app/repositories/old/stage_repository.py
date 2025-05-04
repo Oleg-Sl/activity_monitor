@@ -1,10 +1,10 @@
 import datetime
 from sqlalchemy import insert, select, update
 from sqlalchemy import and_
-from sqlalchemy.exc import SQLAlchemyError
 
-from app.repositories.base import AbstractRepository
 from app.models.stage import Stages
+from app.repositories.base import AbstractRepository
+from sqlalchemy.exc import SQLAlchemyError
 
 
 class StageRepository(AbstractRepository):    
@@ -29,16 +29,6 @@ class StageRepository(AbstractRepository):
             await self.session.rollback()
             print(f"Ошибка при редактировании: {e}")
             raise
-
-    async def get(self, ident: int):
-        stmt = select(Stages).where(Stages.id == ident)
-        result = await self.session.execute(stmt)
-        return result.scalar_one_or_none()
-    
-    async def get_by_status_id(self, ident_str: int):
-        stmt = select(Stages).where(Stages.status_id == ident_str)
-        result = await self.session.execute(stmt)
-        return result.scalar_one_or_none()
 
     async def filter(self, *args):
         stmt = select(Stages).where(and_(*args))

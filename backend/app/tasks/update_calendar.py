@@ -2,8 +2,8 @@ import asyncio
 import datetime
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.db.db import async_session_maker
-from app.repositories.work_calendar import WorkCalendarRepository
+from app.db.session import async_session_maker
+from backend.app.repositories.work_calendar_repository import WorkCalendarRepository
 
 
 async def update_calendar_task(session: AsyncSession, year: int = None):

@@ -6,14 +6,14 @@ import asyncio
 from pathlib import Path
 from uuid import uuid4
 from typing import Optional
-
 from PIL import Image
 
 from .interfaces import IFileDownloader
+from app.core.config import BASE_DIR
 
 
 class FileDownloader(IFileDownloader):
-    def __init__(self, base_storage_path: str):
+    def __init__(self, base_storage_path: str = BASE_DIR):
         self.base_storage_path = Path(base_storage_path)
         self.base_storage_path.mkdir(parents=True, exist_ok=True)
 

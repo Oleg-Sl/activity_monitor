@@ -18,13 +18,15 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-from app.models.entity import Entities
 from app.models.stage import Stages
 from app.models.stage_history import StageHistory
 from app.models.work_calendar import WorkCalendar
 from app.models.credential import Credentials
+from app.models.production_order import ProductionOrder
+from app.models.production_schedule import ProductionSchedule
 
-from app.db.db import Base
+from app.db.session import Base
+
 target_metadata = Base.metadata
 # target_metadata = None
 

@@ -9,7 +9,7 @@ from sqlalchemy.sql import func
 
 import datetime
 
-from ..db.db import Base
+from ..db.session import Base
 
 
 class WorkCalendar(Base):
@@ -24,3 +24,7 @@ class WorkCalendar(Base):
 
     def __repr__(self) -> str:
         return f"<WorkCalendar(id={self.id}, date={self.date}, description={self.description})>"
+
+# alembic revision --autogenerate -m "initial"
+# alembic revision --autogenerate -m "Add fields to entity model"
+# alembic upgrade head

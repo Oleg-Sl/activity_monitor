@@ -1,33 +1,25 @@
 print("app.py loaded")
 
-import uvicorn
+# import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
 
 from app.api.routers.routers import all_routers
-from app.tasks.scheduler import scheduler, start_scheduler, stop_scheduler, schedule_all_tasks
-# from app.tasks.registry import start_scheduler, register_tasks
-from app.tasks.sync_entities import sync_entities_task
+# from app.tasks.scheduler import scheduler, start_scheduler, stop_scheduler, schedule_all_tasks
+# # from app.tasks.registry import start_scheduler, register_tasks
+# from app.tasks.sync_entities import sync_entities_task
 
 # from apscheduler.triggers.interval import IntervalTrigger
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # start_scheduler()
-    scheduler.start()
-    await schedule_all_tasks()
-    # scheduler.add_job()
-    # scheduler.add_job(
-    #     lambda: print('JOB!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11'),
-    #     trigger=IntervalTrigger(minutes=10),
-    #     id='currency_update_job',
-    #     replace_existing=True
-    # )
+    # scheduler.start()
+    # await schedule_all_tasks()
     yield
-    stop_scheduler()
+    # stop_scheduler()
 
 
 def get_application() -> FastAPI:
@@ -62,6 +54,7 @@ app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
 @app.get("/")
 async def test():
+    print('REquest')
     return {"test": 111}
 
 

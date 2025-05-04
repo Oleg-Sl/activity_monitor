@@ -50,8 +50,9 @@ class WorkOrder(Base):
     name: Mapped[Optional[str]] = mapped_column(String(255), comment="Имя изделия")
     product_type_str: Mapped[Optional[str]] = mapped_column(String(255), comment="Аббревиатура типа изделия")
 
-    image_token = mapped_column(String(2048), comment="Уникальный токен фотографии изделия (из url)")
-    image_local_path = mapped_column(String(255), comment="Путь к фотографии на сервере")
+    image_url: Mapped[Optional[str]] = mapped_column(String(2048), comment="url фотографии")
+    image_token: Mapped[Optional[str]] = mapped_column(String(2048), comment="Уникальный токен фотографии изделия (из url)")
+    image_local_path: Mapped[Optional[str]] = mapped_column(String(255), comment="Путь к фотографии на сервере")
 
     allocated_hours: Mapped[Optional[float]] = mapped_column(Float, comment="Выделено часов на стадии")
 

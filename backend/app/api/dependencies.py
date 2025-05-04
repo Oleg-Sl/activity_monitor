@@ -2,7 +2,7 @@ from typing import Annotated
 from fastapi import Depends
 
 from app.utils.unitofwork import UnitOfWork, IUnitOfWork
-from app.bitrix24.bitrix_client import InterfaceBitrixClient
+from app.services.bitrix24.bitrix_client import InterfaceBitrixClient
 
 UOWDep = Annotated[IUnitOfWork, Depends(UnitOfWork)]
 

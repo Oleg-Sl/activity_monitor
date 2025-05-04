@@ -3,7 +3,7 @@ from sqlalchemy import event
 
 
 from app.bitrix24.factory import get_bitrix_client
-from app.db.db import async_session_maker
+from backend.app.db.session import async_session_maker
 from app.repositories.entity_repository import EntityRepository
 from app.repositories.stage_repository import StageRepository
 from app.models.entity import Entities, save_stage_history

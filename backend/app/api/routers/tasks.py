@@ -8,9 +8,8 @@ from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, ConfigDict, Field
 
 from app.api.dependencies import UOWDep
-from app.services.credentials import CredentialsService
-from app.tasks.registry import TASKS
-
+from app.services.credential_service import CredentialsService
+# from app.tasks.registry import TASKS
 
 
 router = APIRouter(
@@ -21,7 +20,6 @@ router = APIRouter(
 
 logging.basicConfig(level=logging.INFO, filename="request/task.log",
                     format="%(asctime)s %(levelname)s %(message)s")
-
 
 
 @router.post("/add", summary="Создать задачу")

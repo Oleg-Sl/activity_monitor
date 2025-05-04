@@ -9,15 +9,18 @@ from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, ConfigDict, Field
 
 from app.api.dependencies import UOWDep
-from app.services.credentials import CredentialsService
+# from app.services.credentials import CredentialsService
 from app.schemas.credentials import BitrixClientSchema
-from app.db.db import async_session_maker
-from app.repositories.entity_repository import EntityRepository
-from app.repositories.workorder_repository import WorkOrderRepository
+from app.db.session import async_session_maker
+# from app.repositories.entity_repository import EntityRepository
+# from app.repositories.workorder_repository import WorkOrderRepository
 from app.repositories.stage_repository import StageRepository
 from app.models.stage import Stages
-from app.models.entity import Entities
-from app.parameters.params import KANBAN_ITEMS
+# from app.models.entity import Entities
+# from app.parameters.params import KANBAN_ITEMS
+from app.services.production_service import ProductionService
+from app.repositories.production_order_repository import ProductionOrderRepository
+from app.constants.kanban import SAWING_AND_ASSEMBLY_ITEMS
 
 
 router = APIRouter(
@@ -43,24 +46,30 @@ async def client_data(
     return {"OK": True}
 
 
-@router.post("/workorder")
-async def get_entities(
-    uow: UOWDep
-):
-    async with async_session_maker() as session:
-        repository = WorkOrderRepository(session)
-        data = await repository.get_grouped_by_kanban()
-        return data
+# @router.post("/workorder")
+# async def get_entities(
+#     uow: UOWDep
+# ):
+#     async with async_session_maker() as session:
+#         repository = WorkOrderRepository(session)
+#         data = await repository.get_grouped_by_kanban()
+#         return data
 
-
-@router.post("/entities")
-async def get_entities(
-    uow: UOWDep
-):
+@router.post("/sawing")
+async def get_sawing():
     async with async_session_maker() as session:
-        repository = EntityRepository(session)
-        data = await repository.get_grouped_by_kanban()
-        return data
+        production_order_repository = ProductionOrderRepository(session)
+        service = ProductionService(production_order_repository)
+        return await service.get_orders_grouped_by_stage(SAWING_AND_ASSEMBLY_ITEMS)
+
+# @router.post("/entities")
+# async def get_entities(
+#     uow: UOWDep
+# ):
+#     async with async_session_maker() as session:
+#         repository = EntityRepository(session)
+#         data = await repository.get_grouped_by_kanban()
+#         return data
     # async with async_session_maker() as session:
     #     repository = EntityRepository(session)
     #     stage_repository = StageRepository(session)

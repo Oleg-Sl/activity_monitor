@@ -1,12 +1,10 @@
-import os
 import asyncio
 from pathlib import Path
 from typing import Optional
-from sqlalchemy.ext.asyncio import AsyncSession
 from urllib.parse import urlparse, parse_qs
 
 from app.infrastructure.file_downloader.file_downloader import FileDownloader
-from app.parameters.params import BASE_DIR, PATCH_TO_UPLOADS
+from app.core.config import BASE_DIR, PATCH_TO_UPLOADS
 
 
 class FileService:
@@ -14,7 +12,7 @@ class FileService:
         self.file_downloader = file_downloader
         self.base_path = base_path
 
-    async def save_file_from_url(self, url: str, old_image_token: Optional[str], filename: Optional[str] = None) -> dict:
+    async def save_file_from_url(self, url: str, old_image_token: Optional[str] = None, filename: Optional[str] = None) -> dict:
         image_token = self.get_image_token_from_url(url)
         if image_token == old_image_token:
             return None

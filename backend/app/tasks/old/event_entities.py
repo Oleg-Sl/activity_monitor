@@ -9,7 +9,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from app.bitrix24.factory import get_bitrix_client
 from app.bitrix24.bitrix_client import InterfaceBitrixClient
-from app.db.db import async_session_maker
+from backend.app.db.session import async_session_maker
 from app.schemas.entity import EntitySchema
 from app.repositories.entity_repository import EntityRepository
 from app.parameters.params import WORKSHOP_TYPE_OF_PRODUCT, PRODUCT_TYPE_DATA, ALLOCATED_HOURS, ZAKUP_FIELDS

@@ -41,12 +41,10 @@ class WorkOrderRepository(AbstractRepository):
         # return result.scalar_one_or_none()
         return result.scalars().all()
 
-
     async def find_all(self):
         stmt = select(WorkOrder)
         result = await self.session.execute(stmt)
         return result.scalars().all()
-
 
     async def create_or_update(self, data: dict) -> int:
         # print('# Получение записи, если она уже сохранена в БД: ', data)

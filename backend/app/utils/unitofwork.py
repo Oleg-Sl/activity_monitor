@@ -3,8 +3,8 @@ print("unitofwork.py loaded")
 from abc import ABC, abstractmethod
 from typing import Type
 
-from app.repositories.credentials import CredentialRepository
-from app.db.db import async_session_maker
+from app.repositories.credential_repository import CredentialRepository
+from app.db.session import async_session_maker
 
 
 class IUnitOfWork(ABC):

@@ -1,10 +1,13 @@
-from typing import Optional
+from typing import List, Optional
+from sqlalchemy import ForeignKey
 from sqlalchemy import String
+from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 
-from app.db.session import Base
+from ..db.db import Base
+# from .stage_history import StageHistory
 
 
 class Stages(Base):
@@ -20,11 +23,15 @@ class Stages(Base):
     name_init: Mapped[Optional[str]] = mapped_column(String(100), server_default="")    # обобщенное название группы стадий 
     semantic: Mapped[Optional[str]] = mapped_column(String(5))                          # семантичекий код стадии
 
-    stage_histories = relationship("StageHistory", back_populates="stage")
+    # stage_history = relationship("StageHistory", back_populates="entity")
+    stage_history = relationship("StageHistory", back_populates="stage")
 
     def __repr__(self) -> str:
         return f"Stages(id={self.id}, entity_id={self.entity_id}, category_id={self.category_id}, status_id={self.status_id}, name={self.name}, semantic={self.semantic})"
 
-# alembic revision --autogenerate -m "initial"
-# alembic revision --autogenerate -m "Add fields to entity model"
-# alembic upgrade head
+    # id: int = Field(..., validation_alias='ID')
+    # entity_id: str = Field(..., validation_alias='ENTITY_ID')
+    # category_id: int | None = Field(..., validation_alias='CATEGORY_ID')
+    # status_id: str = Field(..., validation_alias='STATUS_ID')
+    # name: str = Field(..., validation_alias='NAME')
+    # semantic: str | None = Field(..., validation_alias='SEMANTICS')
