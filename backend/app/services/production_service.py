@@ -66,7 +66,7 @@ class ProductionService:
                 "stage_duration_hours": total_time.total_seconds() / 3600 if total_time else None,
                 "hours_left": hours_left,
                 "fabric_arrival_date": entity.fabric_arrival_date,
-                "image": f'{BASE_URL}/static/{entity.image_local_path}'
+                "image": f'{BASE_URL}/{entity.image_local_path}'
             })
 
         return result
