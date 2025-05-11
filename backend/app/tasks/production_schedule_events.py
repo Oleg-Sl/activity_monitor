@@ -31,15 +31,15 @@ async def sync_production_schedule_events_task():
             work_calendar_repository
         )
 
-        # for event_name in PRODUCTION_SCHEDULE_EVENT_NAMES:
-        #     async for production_schedule_ids in fetcher.fetch_events(event_name):
-        #         result = await service.save_schedule_to_db(production_orders_ids)
+        for event_name in PRODUCTION_SCHEDULE_EVENT_NAMES:
+            async for production_schedule_ids in fetcher.fetch_events(event_name):
+                result = await service.save_productions_to_db(production_schedule_ids)
 
-        print('*'*88)
+        # print('*'*88)
         # production_schedules = await service.get_production([2789, 2829, 2801,])
         # for production_schedule in production_schedules:
         #     print(production_schedule)
-        await service.save_productions_to_db([2789, 2829, 2801,])
+        # await service.save_productions_to_db([2789, 2829, 2801,])
 
 
 if __name__ == "__main__":
