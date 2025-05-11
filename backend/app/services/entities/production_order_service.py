@@ -1,7 +1,9 @@
 from typing import List, Optional
 from pydantic import ValidationError
 
-from app.constants.common import PRODUCTION_ORDER_TYPE_ID
+# from app.constants.common import PRODUCTION_ORDER_TYPE_ID
+from app.constants.production_order import PRODUCTION_ORDER_TYPE_ID
+
 from app.services.bitrix24.bitrix_client import InterfaceBitrixClient
 from app.schemas.product_order_schema import ProductOrderInSchema
 from app.infrastructure.file_downloader.file_downloader import FileDownloader

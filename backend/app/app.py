@@ -7,6 +7,7 @@ from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
 
 from app.api.routers.routers import all_routers
+from app.tasks.scheduler import scheduler, start_scheduler, stop_scheduler, schedule_all_tasks
 # from app.tasks.scheduler import scheduler, start_scheduler, stop_scheduler, schedule_all_tasks
 # # from app.tasks.registry import start_scheduler, register_tasks
 # from app.tasks.sync_entities import sync_entities_task
@@ -16,10 +17,10 @@ from app.api.routers.routers import all_routers
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # scheduler.start()
-    # await schedule_all_tasks()
+    start_scheduler()
+    await schedule_all_tasks()
     yield
-    # stop_scheduler()
+    stop_scheduler()
 
 
 def get_application() -> FastAPI:
@@ -30,7 +31,6 @@ def get_application() -> FastAPI:
         root_path="/monitoractivity",
         lifespan=lifespan
     )
-    # application.include_router(get_apps_router())
 
     application.add_middleware(
         CORSMiddleware,

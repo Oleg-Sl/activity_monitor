@@ -16,6 +16,7 @@ class ProductionSchedule(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, comment="Идентификатор из битрикс")
     title: Mapped[Optional[str]] = mapped_column(String(255), comment="Название смарт-процесса в битрикс")
+    entity_type_id: Mapped[Optional[int]] = mapped_column(Integer, comment="Идентификатор типа смарт процесса")
 
     created_time: Mapped[datetime] = mapped_column(DateTime(timezone=True), comment="Когда создан")
     updated_time: Mapped[datetime] = mapped_column(DateTime(timezone=True), comment="Когда обновлён")
@@ -34,7 +35,7 @@ class ProductionSchedule(Base):
     product_type: Mapped[Optional[int]] = mapped_column(Integer, comment="Тип изделия - числовой код")
 
     priority: Mapped[Optional[str]] = mapped_column(String(16), comment="Приоритет")
-    production_вate: Mapped[datetime] = mapped_column(DateTime(timezone=True), comment="Дата производства")
+    production_date: Mapped[datetime] = mapped_column(DateTime(timezone=True), comment="Дата производства")
 
     name: Mapped[Optional[str]] = mapped_column(String(255), comment="Имя изделия")
     product_type_str: Mapped[Optional[str]] = mapped_column(String(255), comment="Аббревиатура типа изделия")

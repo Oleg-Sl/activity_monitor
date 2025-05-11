@@ -36,7 +36,10 @@ class ProductionScheduleRepository(AbstractRepository):
             raise
 
     async def filter(self, *args):
-        stmt = select(ProductionSchedule).where(and_(*args))
+        stmt = select(ProductionSchedule).where(and_(*args)).order_by(
+            ProductionSchedule.priority.is_(None),
+            ProductionSchedule.production_date  
+        )
         result = await self.session.execute(stmt)
         return result.scalars().all()
 
