@@ -140,8 +140,9 @@ class Main extends React.Component {
 
 const columns = {
   "plan": {
-    title: "План",
-    code: "development",
+    name: "План",
+    style: "expecting-color",
+    type: "plan",
     status_id: [
         "DT179_15:UC_D7DURR",
         "DT179_15:UC_HXKO7S"
