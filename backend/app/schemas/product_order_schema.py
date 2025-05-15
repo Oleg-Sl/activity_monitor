@@ -40,6 +40,8 @@ class ProductOrderInSchema(BaseModel):
     image_local_path: Optional[str] = None
 
     allocated_hours: Optional[float] = Field(..., validation_alias='ufCrm21_1745248795')
+    priority: Optional[float] = None
+    production_date: Optional[datetime] = None
 
     @model_validator(mode="before")
     def extract_image_url(cls, data):

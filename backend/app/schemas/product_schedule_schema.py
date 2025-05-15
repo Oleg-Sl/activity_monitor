@@ -17,7 +17,7 @@ class ProductScheduleInSchema(BaseModel):
 
     created_by: int = Field(..., validation_alias='createdBy')
     assigned_by_id: Optional[int] = Field(..., validation_alias='assignedById')
-    # company_id: Optional[int] = Field(..., validation_alias='companyId')
+    company_id: Optional[int] = None
     category_id: Optional[int] = Field(..., validation_alias='categoryId')
 
     moved_time: Optional[datetime] = Field(..., validation_alias='movedTime')
@@ -26,28 +26,29 @@ class ProductScheduleInSchema(BaseModel):
     stage_id_str: Optional[str] = Field(..., validation_alias='stageId')
     previous_stage_id: Optional[str] = Field(..., validation_alias='previousStageId')
 
-    # opportunity: Optional[float] = Field(..., validation_alias='opportunity')
+    opportunity: Optional[float] = None
     product_id: Optional[int] = Field(..., validation_alias='ufCrm9_1737034529')
     product_type: Optional[int] = Field(..., validation_alias='ufCrm9_1734533215')
 
-    # fabric_arrival_date: Optional[str] = None
+    fabric_arrival_date: Optional[str] = None
 
     name: Optional[str] = None
     product_type_str: Optional[str] = None
 
-    # image_url: Optional[str] = None
-    # image_token: Optional[str] = None
-    # image_local_path: Optional[str] = None
+    image_url: Optional[str] = None
+    image_token: Optional[str] = None
+    image_local_path: Optional[str] = None
 
-    # allocated_hours: Optional[float] = Field(..., validation_alias='ufCrm9_1734623152660')
-    priority: Optional[float] = Field(..., validation_alias='ufCrm9_1734166282')
+    allocated_hours: Optional[float] = Field(..., validation_alias='ufCrm9_1734623152660')
+    priority: Optional[str] = Field(..., validation_alias='ufCrm9_1734166282')
     production_date: Optional[datetime] = Field(..., validation_alias='ufCrm9_1686973093731')
 
-    @field_validator('priority', mode='before')
+    @field_validator('product_id', 'priority', mode='before')
     def empty_str_to_none(cls, v):
         if v == '':
             return None
         return v
+    
 
     # @model_validator(mode="before")
     # def extract_image_url(cls, data):

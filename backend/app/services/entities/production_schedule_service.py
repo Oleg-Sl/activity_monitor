@@ -9,7 +9,8 @@ from app.services.bitrix24.bitrix_client import InterfaceBitrixClient
 from app.schemas.product_schedule_schema import ProductScheduleInSchema
 # from app.infrastructure.file_downloader.file_downloader import FileDownloader
 from app.services.file_service import FileServiceFactory
-from app.repositories.production_schedule_repository import ProductionScheduleRepository
+# from app.repositories.production_schedule_repository import ProductionScheduleRepository
+from app.repositories.production_order_repository import ProductionOrderRepository
 from app.repositories.stage_history_repository import StageHistoryRepository
 from app.repositories.work_calendar_repository import WorkCalendarRepository
 from app.repositories.stage_repository import StageRepository
@@ -20,7 +21,7 @@ class ProductionScheduleService:
     def __init__(
         self,
         bitrix_client: InterfaceBitrixClient,
-        production_repo: ProductionScheduleRepository,
+        production_repo: ProductionOrderRepository,
         history_repo: StageHistoryRepository,
         stage_repo: StageRepository,
         calendar_repo: WorkCalendarRepository,
@@ -46,10 +47,12 @@ class ProductionScheduleService:
 
             for production in raw_productions:
                 try:
+                    # print('ufCrm9_1737034529 = ', production['ufCrm9_1737034529'])
                     order = ProductScheduleInSchema(**production)
                     productions.append(order)
                 except ValidationError as e:
-                    pprint(e)
+                    pprint('Error: ', e)
+                    pprint(production)
                     errors.append({"data": production, "error": e.errors()})
             if errors:
                 print('Errors in receiving production of schedule: ', errors)
@@ -58,7 +61,34 @@ class ProductionScheduleService:
         except Exception as e:
             print(e)
             return []
-    
+
+    async def filter_production_orders(self, filter_data: dict):
+        try:
+            raw_productions = [production async for production in self.bitrix_client.get_entities(self.entity_type_id, filter_data)]
+            errors = []
+
+            for raw_production in raw_productions:
+                # print('===> ', raw_production)
+                try:
+                    # print('ufCrm9_1737034529 = ', raw_production['ufCrm9_1737034529'])
+                    production = ProductScheduleInSchema(**raw_production)
+                    yield production
+                except ValidationError as e:
+                    pprint(e)
+                    print(raw_production)
+                    errors.append({"data": raw_production, "error": e.errors()})
+        except Exception as e:
+            pass
+
+
+    async def sync_production(self, date_start, date_end):
+        productions = self.filter_production_orders({
+            '>=updatedTime': date_start,
+            '<=updatedTime': date_end,
+        })
+        async for production in productions:
+            await self._save_production_and_stage_history(production)
+
     # async def _prepare_product_order_data(self, production_order: ProductScheduleInSchema) -> ProductScheduleInSchema:
     #     image_url = production_order.image_url
     #     if image_url:
@@ -86,3 +116,4 @@ class ProductionScheduleService:
             new_order_id = await self.production_repo.edit_one(production.id, production.model_dump())
         else:
             new_order_id = await self.production_repo.add_one(production.model_dump())
+        print('new_order_id = ', new_order_id)

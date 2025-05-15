@@ -1,8 +1,21 @@
+from .product_schedule import PRODUCTION_SCHEDULE_TYPE_ID
+from .production_order import PRODUCTION_ORDER_TYPE_ID
+
 
 SAWING_AND_ASSEMBLY_ITEMS = {
+    'plan': {
+        'title': 'План',
+        'code': 'development',
+        'entity_type_id': PRODUCTION_SCHEDULE_TYPE_ID,
+        'status_id': [
+            'DT179_15:UC_D7DURR',
+            'DT179_15:UC_HXKO7S'
+        ]
+    },
     'expecting': {
         'title': 'Ожидание',
         'code': 'development',
+        'entity_type_id': PRODUCTION_ORDER_TYPE_ID,
         'status_id': [
             'DT166_31:UC_HNUB5Y',
             'DT166_31:CLIENT',
@@ -14,6 +27,7 @@ SAWING_AND_ASSEMBLY_ITEMS = {
     'readysawing': {
         'title': 'Готов к распилу',
         'code': 'development',
+        'entity_type_id': PRODUCTION_ORDER_TYPE_ID,
         'status_id': [
             'DT166_119:NEW'
         ]
@@ -21,6 +35,7 @@ SAWING_AND_ASSEMBLY_ITEMS = {
     'sawed': {
         'title': 'Пилится',
         'code': 'sawing',
+        'entity_type_id': PRODUCTION_ORDER_TYPE_ID,
         'status_id': [
             'DT166_119:PREPARATION'
         ]
@@ -28,6 +43,7 @@ SAWING_AND_ASSEMBLY_ITEMS = {
     'awaitingassembly': {
         'title': 'Ожидает сборку',
         'code': 'carpentry',
+        'entity_type_id': PRODUCTION_ORDER_TYPE_ID,
         'status_id': [
             'DT166_119:UC_HV90U6'
         ]
@@ -35,6 +51,7 @@ SAWING_AND_ASSEMBLY_ITEMS = {
     'karskasisgoing': {
         'title': 'Карскас собирается',
         'code': 'carpentry_assembly',
+        'entity_type_id': PRODUCTION_ORDER_TYPE_ID,
         'status_id': [
             'DT166_119:CLIENT'
         ]

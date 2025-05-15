@@ -19,7 +19,10 @@ from app.models.stage import Stages
 # from app.models.entity import Entities
 # from app.parameters.params import KANBAN_ITEMS
 from app.services.production_service import ProductionService
+from app.services.workcalendar_service import WorkCaldendarService
+
 from app.repositories.production_order_repository import ProductionOrderRepository
+from app.repositories.work_calendar_repository import WorkCalendarRepository
 from app.repositories.production_schedule_repository import ProductionScheduleRepository
 from app.constants.kanban import SAWING_AND_ASSEMBLY_ITEMS
 
@@ -60,8 +63,10 @@ async def client_data(
 async def get_sawing():
     async with async_session_maker() as session:
         production_order_repository = ProductionOrderRepository(session)
-        production_schedule_repository = ProductionScheduleRepository(session)
-        service = ProductionService(production_order_repository, production_schedule_repository)
+        work_calendar_repository = WorkCalendarRepository(session)
+        work_calendar_service = WorkCaldendarService(work_calendar_repository)
+        # production_schedule_repository = ProductionScheduleRepository(session)
+        service = ProductionService(production_order_repository, work_calendar_service)
         return await service.get_orders_grouped_by_stage(SAWING_AND_ASSEMBLY_ITEMS)
 
 

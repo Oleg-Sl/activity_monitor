@@ -23,7 +23,8 @@ class WorkCalendarRepository(AbstractRepository):
     async def filter(self, *args):
         stmt = select(WorkCalendar).where(and_(*args))
         result = await self.session.execute(stmt)
-        return result.scalar_one_or_none()
+        # return result.scalar_one_or_none()
+        return result.scalars().all()
 
     async def find_all(self):
         stmt = select(WorkCalendar)

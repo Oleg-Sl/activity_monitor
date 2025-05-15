@@ -53,7 +53,24 @@ class ProductionOrderService:
             return [await self._prepare_product_order_data(production_order) for production_order in production_orders]
         except Exception as e:
             return []
-    
+
+    async def filter_production_orders(self, filter_data: dict):
+        try:
+            raw_production_orders = [production_order async for production_order in self.bitrix_client.get_entities(self.entity_type_id, filter_data)]
+            errors = []
+
+            for production_order in raw_production_orders:
+                # print('===> ', production_order)
+                try:
+                    order = ProductOrderInSchema(**production_order)
+                    production_data = await self._prepare_product_order_data(order)
+                    yield production_data
+                except ValidationError as e:
+                    print(e)
+                    errors.append({"data": production_order, "error": e.errors()})
+        except Exception as e:
+            pass
+
     async def _prepare_product_order_data(self, production_order: ProductOrderInSchema) -> ProductOrderInSchema:
         image_url = production_order.image_url
         if image_url:
@@ -64,12 +81,18 @@ class ProductionOrderService:
 
         return production_order
 
+    async def sync_production(self, date_start, date_end):
+        production_orders = self.filter_production_orders({
+            '>=updatedTime': date_start,
+            '<=updatedTime': date_end,
+        })
+        async for order in production_orders:
+            # print('>>> = ', order)
+            await self._save_order_and_stage_history(order)
+
     async def save_orders_to_db(self, production_orders_ids: List[int]):
         production_orders = await self.get_production_orders(production_orders_ids)
         for order in production_orders:
-            # print('>>> ', type(order))
-            # new_stage = await self.stage_repo.get_by_status_id(order.stage_id_str)
-            # print('>>> ', new_stage)
             await self._save_order_and_stage_history(order)
 
     async def _save_order_and_stage_history(self, order: ProductOrderInSchema):
@@ -85,6 +108,7 @@ class ProductionOrderService:
             new_order_id = await self.order_repo.edit_one(order.id, order.model_dump())
         else:
             new_order_id = await self.order_repo.add_one(order.model_dump())
+        print('new_order_id = ', new_order_id)
 
         # self.order_repo.commit()
 

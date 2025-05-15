@@ -72,7 +72,7 @@ class InterfaceBitrixClient(ABC):
                     "id": "ASC"
                 }
             })
-
+            print('total = ', response.get('total'))
             entities = response.get("result", {}).get("items", [])
             if not entities:
                 break

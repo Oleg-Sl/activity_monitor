@@ -19,62 +19,64 @@ from app.models.production_order import ProductionOrder
 from app.models.production_schedule import ProductionSchedule
 from app.repositories.production_order_repository import ProductionOrderRepository
 from app.repositories.production_schedule_repository import ProductionScheduleRepository
+from app.services.workcalendar_service import WorkCaldendarService
 
 
 class ProductionService:
-    def __init__(self, production_order_repo: ProductionOrderRepository, production_schedule_repo: ProductionScheduleRepository):
+    def __init__(self, production_order_repo: ProductionOrderRepository, calendar_service: WorkCaldendarService):
         self.order_repo = production_order_repo
-        self.production_schedule = production_schedule_repo
+        self.calendar_service = calendar_service
+        # self.production_schedule = production_schedule_repo
 
-    async def get_production_schedules(self) -> List:
-        statuses_ids = ['DT179_15:UC_D7DURR', 'DT179_15:UC_HXKO7S',]
-        productions = await self.production_schedule.filter(ProductionSchedule.stage_id_str.in_(statuses_ids))
-        result = []
-        for production in productions:
-            result.append({
-                "id": production.id,
-                "name": production.name,
-                "allocated_hours": None,
-                "stage_id": production.stage_id,
-                "stage_str": production.stage_id_str,
-                "stage_duration_seconds": None,
-                "stage_duration_hours": None,
-                "hours_left": None,
-                "fabric_arrival_date": None,
-                "image": None,
-                "production_date": production.production_date,
-                "priority": production.priority,
-            })
+    # async def get_production_schedules(self) -> List:
+    #     statuses_ids = ['DT179_15:UC_D7DURR', 'DT179_15:UC_HXKO7S',]
+    #     productions = await self.production_schedule.filter(ProductionSchedule.stage_id_str.in_(statuses_ids))
+    #     result = []
+    #     for production in productions:
+    #         result.append({
+    #             "id": production.id,
+    #             "name": production.name,
+    #             "allocated_hours": None,
+    #             "stage_id": production.stage_id,
+    #             "stage_str": production.stage_id_str,
+    #             "stage_duration_seconds": None,
+    #             "stage_duration_hours": None,
+    #             "hours_left": None,
+    #             "fabric_arrival_date": None,
+    #             "image": None,
+    #             "production_date": production.production_date,
+    #             "priority": production.priority,
+    #         })
 
-        ind = 0
-        for production in result:
-            if production['priority']:
-                if production['priority'] == '01':
-                    production["color"] = "#FF0000"
-                elif production['priority'] == 1:
-                    production["color"] = "#FFA500"
-                elif production['priority'] == 2:
-                    production["color"] = "#FFFF00"
-            else:
-                if ind == 0:
-                    production["color"] = "#FF0000"
-                elif ind == 1:
-                    production["color"] = "#FFA500"
-                elif ind == 2:
-                    production["color"] = "#FFFF00"
-                ind += 1
+    #     ind = 0
+    #     for production in result:
+    #         if production['priority']:
+    #             if production['priority'] == '01':
+    #                 production["color"] = "#FF0000"
+    #             elif production['priority'] == 1:
+    #                 production["color"] = "#FFA500"
+    #             elif production['priority'] == 2:
+    #                 production["color"] = "#FFFF00"
+    #         else:
+    #             if ind == 0:
+    #                 production["color"] = "#FF0000"
+    #             elif ind == 1:
+    #                 production["color"] = "#FFA500"
+    #             elif ind == 2:
+    #                 production["color"] = "#FFFF00"
+    #             ind += 1
 
-        return result
+    #     return result
 
     async def get_orders_grouped_by_stage(self, kanban_config: dict) -> dict:
         result = {key: [] for key in kanban_config}
         now = datetime.datetime.now(datetime.timezone.utc)
 
         all_statuses_ids = sum((v['status_id'] for v in kanban_config.values()), [])
-        # print('all_statuses_ids = ', all_statuses_ids)
 
-        entities = await self.order_repo.filter(ProductionOrder.stage_id_str.in_(all_statuses_ids))
-        for entity in entities:
+        order_entities = await self.order_repo.filter(ProductionOrder.stage_id_str.in_(all_statuses_ids))
+
+        for entity in order_entities:
             current_group = None
             for group_key, group_data in kanban_config.items():
                 if entity.stage_id_str in group_data['status_id']:
@@ -96,17 +98,21 @@ class ProductionService:
             # if current_stage:
             #     total_time = now - current_stage.start_time
 
-            total_time = now - entity.moved_time
+            # total_time = now - entity.moved_time
+            elapsed_time = await self.calendar_service.calculate_work_time(entity.moved_time, now)
 
-            hours_left = (entity.allocated_hours - total_time.total_seconds() / 3600) if total_time and entity.allocated_hours else '-'
+            hours_left = (entity.allocated_hours - elapsed_time.total_seconds() / 3600) if elapsed_time and entity.allocated_hours else '-'
+
+            self.calendar_service
             result[current_group].append({
                 "id": entity.id,
                 "name": entity.name,
-                "allocated_hours": entity.allocated_hours,
                 "stage_id": entity.stage_id,
                 "stage_str": entity.stage_id_str,
-                "stage_duration_seconds": total_time.total_seconds() if total_time else None,
-                "stage_duration_hours": total_time.total_seconds() / 3600 if total_time else None,
+                "allocated_hours": entity.allocated_hours,
+                "stage_duration_seconds": elapsed_time.total_seconds() if elapsed_time else None,
+                "stage_duration_hours": elapsed_time.total_seconds() / 3600 if elapsed_time else None,
+                "elapsed_time": (now - entity.moved_time)  / 3600,
                 "hours_left": hours_left,
                 "fabric_arrival_date": entity.fabric_arrival_date,
                 "image": f'{BASE_URL}/{entity.image_local_path}' if entity.image_local_path else None,
@@ -116,17 +122,22 @@ class ProductionService:
             })
 
         for group in result:
-            for ind, entity in enumerate(result[group]):
-                if ind == 0:
-                    entity["color"] = "#FF0000"
-                elif ind == 1:
-                    entity["color"] = "#FFA500"
-                elif ind == 2:
-                    entity["color"] = "#FFFF00"
+            ind = 0
+            for production in result[group]:
+                if production['priority']:
+                    if production['priority'] == '01':
+                        production["color"] = "#FF0000"
+                    elif production['priority'] == 1:
+                        production["color"] = "#FFA500"
+                    elif production['priority'] == 2:
+                        production["color"] = "#FFFF00"
                 else:
-                    break
-
-        production_schedules = await self.get_production_schedules()
-        result['expecting'].extend(production_schedules)
+                    if ind == 0:
+                        production["color"] = "#FF0000"
+                    elif ind == 1:
+                        production["color"] = "#FFA500"
+                    elif ind == 2:
+                        production["color"] = "#FFFF00"
+                    ind += 1
 
         return result
