@@ -1,27 +1,32 @@
 import React from "react";
-import ClassNames from "classnames";
-import { connect } from "react-redux";
-import dragging from "../../hoc/dragging";
-import { deleteTask } from "../../actions/";
+// import ClassNames from "classnames";
+// import { connect } from "react-redux";
+// import dragging from "../../hoc/dragging";
+// import { deleteTask } from "../../actions/";
 
 
 class Card extends React.Component {
   render() {
     const { data, collapsed } = this.props;
     // const { id, title, name, image, productionTime, fabric, remainingTime } = data;
-    const { id, title, name, image, allocated_hours, fabric, stage_duration_seconds } = data;
+    const { id, name, image, allocated_hours, fabric_arrival_date, stage_duration_hours, hours_left, color } = data;
     // console.log('data = ', data)
     return (
       <div 
         className={`card ${collapsed ? 'collapsed' : ''}`}
         data-id={id}
       >
-        <div className="card__header card-color-low card__header-priority">
+        <div
+          // className={ "card__header card__header-priority" }
+          className={`card__header card__header-priority ${!color ? "card-color-low" : ""}`}
+          // style={color ? `background-color: ;` : ""} card-color-low
+          style={{ backgroundColor: color }}
+        >
           <div className="">
             <div className="card__header-product-name">{name}</div>
           </div>
           <div className="">
-            <div className="card__header-production-time">{allocated_hours ? allocated_hours.toFixed(1) : '-'}ч.</div>
+            <div className="card__header-production-time">{allocated_hours ? allocated_hours.toFixed(1) : '-'}</div>
           </div>
         </div>
         
@@ -32,11 +37,11 @@ class Card extends React.Component {
             </div>
             <div className="card__footer-fabric">
               <div>Ткань:</div>
-              <div className="card__footer-fabric-name">{fabric}</div>
+              <div className="card__footer-fabric-name">{fabric_arrival_date}</div>
             </div>
             <div className="card__footer">
               <div>Ост. время:</div>
-              <div className="card__footer-remaining-time">{(stage_duration_seconds / 3600).toFixed(1)}</div>
+              <div className="card__footer-remaining-time">{hours_left && typeof(hours_left) === 'number' ? hours_left.toFixed(1) : '-'}</div>
             </div>
           </>
         )}

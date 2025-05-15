@@ -4,7 +4,7 @@
 .pnp.js
 
 # Build files
-/dist
+# /dist
 /.out
 /build
 

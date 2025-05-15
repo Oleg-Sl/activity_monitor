@@ -115,6 +115,12 @@ class Cards extends React.PureComponent {
   get cardsList() {
     const { data } = this.props;
     const { collapsedCards } = this.state;
+    
+    for (let item of data) {
+      if (!item.image) {
+        collapsedCards.add(item.id.toString())
+      }
+    }
 
     return data.map(item => (
       <Card 

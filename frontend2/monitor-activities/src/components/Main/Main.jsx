@@ -52,7 +52,7 @@ class Main extends React.Component {
     try {
       this.setState({ loading: true, error: null });
 
-      const response = await fetch('https://database.tamamm.ru/monitoractivity/monitoring/entities', {
+      const response = await fetch('https://database.tamamm.ru/monitoractivity/monitoring/sawing', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json;charset=utf-8'
@@ -65,6 +65,7 @@ class Main extends React.Component {
       }
       
       const data = await response.json();
+      console.log('data = ', data);
       let kanban_data = [];
       for (let col_type in data) {
         let stage_data = columns[col_type];
@@ -138,6 +139,14 @@ class Main extends React.Component {
 
 
 const columns = {
+  "plan": {
+    title: "План",
+    code: "development",
+    status_id: [
+        "DT179_15:UC_D7DURR",
+        "DT179_15:UC_HXKO7S"
+    ]
+  },
   "expecting": {
     name: "Ожидание",
     style: "expecting-color",
