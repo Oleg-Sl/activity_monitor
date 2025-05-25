@@ -33,8 +33,8 @@ class Card extends React.Component {
         {!collapsed && (
           <>
             <div className="card__photo">
-              <img className="card__photo-image" alt={name} src='https://database.tamamm.ru/monitoractivity/static/uploads/192d3e5b6ec1425284b48d83d9a6b773.png' />
-              {/* <img className="card__photo-image" alt={name} src={image} /> */}
+              {/* <img className="card__photo-image" alt={name} src='https://database.tamamm.ru/monitoractivity/static/uploads/192d3e5b6ec1425284b48d83d9a6b773.png' /> */}
+              <img className="card__photo-image" alt={name} src={image} />
             </div>
             <div className="card__footer-fabric">
               <div>Ткань:</div>

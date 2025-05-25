@@ -98,6 +98,11 @@ class Main extends React.Component {
 
   render() {
     const { columns, loading, error } = this.state;
+    console.log('columns = ', columns);
+
+    const values = Object.values(columns);
+    console.log('values = ', values);
+
 
     return (
       <section className="kanban__main">
@@ -125,7 +130,7 @@ class Main extends React.Component {
     return (
       <React.Fragment>
         <div className="kanban__main-wrapper">
-          {columns.map(col => (
+          {Object.values(columns).map(col => (
             <Cards
               key={col.stage}
               name={col.title}
