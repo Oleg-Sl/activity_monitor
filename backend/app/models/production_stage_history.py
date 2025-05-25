@@ -20,7 +20,7 @@ class ProductionStageHistory(Base):
     stage_id_str: Mapped[str] = mapped_column(String(255), comment="Стадия - абревиатура")
     moved_time: Mapped[datetime] = mapped_column(DateTime(timezone=True), comment="Когда передвинут")
 
-    # production_order = relationship("ProductionOrder", back_populates="stage_histories")
+    production_order = relationship("ProductionOrder", back_populates="production_stage_history")
 
 
 # alembic revision --autogenerate -m "initial"
