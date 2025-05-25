@@ -31,7 +31,7 @@ async def sync_production_schedules_task():
             work_calendar_repository
         )
 
-        await service.sync_production('2025-05-01', '2025-05-25')
+        await service.sync_production('2025-04-01', '2025-06-05')
 
 
 if __name__ == "__main__":
