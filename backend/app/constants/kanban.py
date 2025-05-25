@@ -10,7 +10,7 @@ SAWING_AND_ASSEMBLY_KANBAN = [
         'entity_type_id': PRODUCTION_SCHEDULE_TYPE_ID,
         'status_id': [
             'DT179_15:UC_D7DURR',
-            'DT179_15:UC_HXKO7S'
+            # 'DT179_15:UC_HXKO7S'
         ]
     },
     {
