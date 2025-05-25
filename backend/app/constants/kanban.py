@@ -19,11 +19,11 @@ SAWING_AND_ASSEMBLY_KANBAN = [
         'code': 'development',
         'entity_type_id': PRODUCTION_ORDER_TYPE_ID,
         'status_id': [
-            'DT166_31:UC_HNUB5Y',
-            'DT166_31:CLIENT',
-            'DT166_29:NEW',
-            'DT166_29:3',
-            'DT166_29:16'
+            'DT166_31:UC_HNUB5Y',   # Технолог (№2 - Александр)
+            'DT166_31:CLIENT',      # Технолог (№1 - Валерия)
+            # 'DT166_29:NEW',
+            # 'DT166_29:3',
+            # 'DT166_29:16'
         ]
     },
     {
@@ -32,7 +32,7 @@ SAWING_AND_ASSEMBLY_KANBAN = [
         'code': 'development',
         'entity_type_id': PRODUCTION_ORDER_TYPE_ID,
         'status_id': [
-            'DT166_119:NEW'
+            'DT166_119:NEW'     # Ждет запуска
         ]
     },
     {
@@ -41,7 +41,7 @@ SAWING_AND_ASSEMBLY_KANBAN = [
         'code': 'sawing',
         'entity_type_id': PRODUCTION_ORDER_TYPE_ID,
         'status_id': [
-            'DT166_119:PREPARATION'
+            'DT166_119:PREPARATION'     # Распиловка
         ]
     },
     {
@@ -50,7 +50,7 @@ SAWING_AND_ASSEMBLY_KANBAN = [
         'code': 'carpentry',
         'entity_type_id': PRODUCTION_ORDER_TYPE_ID,
         'status_id': [
-            'DT166_119:UC_HV90U6'
+            'DT166_119:UC_HV90U6'   # Ждет Сборки
         ]
     },
     {
@@ -59,7 +59,7 @@ SAWING_AND_ASSEMBLY_KANBAN = [
         'code': 'carpentry_assembly',
         'entity_type_id': PRODUCTION_ORDER_TYPE_ID,
         'status_id': [
-            'DT166_119:CLIENT'
+            'DT166_119:CLIENT'  # Сборка каркасов
         ]
     }
 ]
