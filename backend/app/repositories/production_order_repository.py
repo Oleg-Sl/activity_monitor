@@ -7,6 +7,7 @@ from typing import Annotated, Dict, List
 from app.models.production_order import ProductionOrder
 from app.models.stage import Stages
 from app.models.stage_history import StageHistory
+from app.models.production_stage_history import ProductionStageHistory
 from app.repositories.base import AbstractRepository
 from sqlalchemy.exc import SQLAlchemyError
 # from app.parameters.params import KANBAN_ITEMS, BASE_URL
@@ -75,6 +76,19 @@ class ProductionOrderRepository(AbstractRepository):
         result = await self.session.execute(stmt)
         await self.session.flush()
         new_production_order = result.scalar_one()
+
+
+    async def get_completed(self, stage_ids_str: List[str], week_start, week_end):
+        stmt = select(ProductionOrder).join(ProductionStageHistory).where(
+            and_(
+                ProductionStageHistory.stage_id_str.in_(stage_ids_str),
+                ProductionStageHistory.moved_time >= week_start,
+                ProductionStageHistory.moved_time <= week_end,
+                ProductionOrder.stage_id_str.not_in(stage_ids_str)
+            )
+        ).order_by(ProductionOrder.production_date)
+        result = await self.session.execute(stmt)
+        return result.scalars().all()
 
     # async def create_or_update(self, data: dict) -> int:
     #     try:

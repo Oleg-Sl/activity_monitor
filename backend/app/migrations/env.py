@@ -24,6 +24,7 @@ from app.models.work_calendar import WorkCalendar
 from app.models.credential import Credentials
 from app.models.production_order import ProductionOrder
 from app.models.production_schedule import ProductionSchedule
+from app.models.production_stage_history import ProductionStageHistory
 
 from app.db.session import Base
 
