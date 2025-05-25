@@ -52,8 +52,8 @@ class ProductionOrder(Base):
 
     # stage_histories = relationship("StageHistory", back_populates="production_order")
 
-    production_stage_history = relationship("ProductionStageHistory", backref="production_order")
-
+    # production_stage_history = relationship("ProductionStageHistory", backref="production_order")
+    production_stage_histories = relationship("ProductionStageHistory", back_populates="production_order")
 
     def __repr__(self):
         return (

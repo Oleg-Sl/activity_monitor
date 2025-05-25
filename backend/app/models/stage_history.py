@@ -27,7 +27,7 @@ class StageHistory(Base):
     non_work_time: Mapped[timedelta] = mapped_column(Interval, default=timedelta(0), comment='Время нахождения на стадии')
 
     production_schedule = relationship("ProductionSchedule", back_populates="stage_histories")
-    production_order = relationship("ProductionOrder", back_populates="stage_histories")
+    # production_order = relationship("ProductionOrder", back_populates="stage_histories")
     stage = relationship("Stages", back_populates="stage_histories")
 
     def __repr__(self) -> str:
