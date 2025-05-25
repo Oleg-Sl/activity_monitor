@@ -23,37 +23,26 @@ class App extends React.Component {
 
   render() {
     return (
-      // <Router>
-        <div className="kanban-wrapper">
-          <div className="kanban">
-            <Logo />
-            <Header />
-            <React.Suspense fallback={<Loading />}>
-              <Sidebar />
-            </React.Suspense>
-            <Routes>
-              <Route path="/" element={<Basic />} />
-              {/* <Route path="/manage" element={<Manage />} />
-              <Route path="/schedule" element={<Schedule />} />
-              <Route path="/reports" element={<Reports />} />
-              <Route path="/settings" element={<Settings />} /> */}
-            </Routes>
-            {/* <Switch>
-              <Route exact path="/" component={Basic} />
-              <Route path="/manage" component={Manage} />
-              <Route path="/schedule" component={Schedule} />
-              <Route path="/reports" component={Reports} />
-              <Route path="/settings" component={Settings} />
-            </Switch> */}
-          </div>
+      <div className="kanban-wrapper">
+        <div className="kanban">
+          <Logo />
+          <Header />
+          <React.Suspense fallback={<Loading />}>
+            <Sidebar />
+          </React.Suspense>
+          <Routes>
+            <Route path="/" element={<Basic page="home"/>} />
+            <Route path="/sawing" element={<Basic page="sawing"/>} />
+          </Routes>
         </div>
-        
-      // {/* </Router> */}
+      </div>
     );
   }
 }
 
 export default App;
+
+
 
 // function App() {
 //   const [count, setCount] = useState(0)

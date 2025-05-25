@@ -13,26 +13,26 @@ class Cards extends React.PureComponent {
   containerRef = React.createRef();
   cardsContainerRef = React.createRef();
 
-  componentDidMount() {
-    // this.checkAfterRender();
-    this.checkCardsVisibility();
-    // window.addEventListener('resize', this.handleResize);
-  }
+  // componentDidMount() {
+  //   // this.checkAfterRender();
+  //   this.checkCardsVisibility();
+  //   // window.addEventListener('resize', this.handleResize);
+  // }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.data !== this.props.data) {
-      // this.checkAfterRender();
-      this.checkCardsVisibility();
-    }
-  }
+  // componentDidUpdate(prevProps) {
+  //   if (prevProps.data !== this.props.data) {
+  //     // this.checkAfterRender();
+  //     this.checkCardsVisibility();
+  //   }
+  // }
 
-  checkAfterRender = () => {
-    requestAnimationFrame(() => {
-      if (this.state.openCards) {
-        this.checkCardsVisibility();
-      }
-    });
-  };
+  // checkAfterRender = () => {
+  //   requestAnimationFrame(() => {
+  //     if (this.state.openCards) {
+  //       this.checkCardsVisibility();
+  //     }
+  //   });
+  // };
 
   // componentDidMount() {
   //   this.checkCardsVisibility();
@@ -49,10 +49,10 @@ class Cards extends React.PureComponent {
   //   window.removeEventListener('resize', this.handleResize);
   // }
 
-  handleResize = () => {
-    clearTimeout(this.resizeTimeout);
-    this.resizeTimeout = setTimeout(this.checkCardsVisibility, 100);
-  };
+  // handleResize = () => {
+  //   clearTimeout(this.resizeTimeout);
+  //   this.resizeTimeout = setTimeout(this.checkCardsVisibility, 100);
+  // };
 
   checkCardsVisibility = () => {
     console.log('checkCardsVisibility');
@@ -92,9 +92,9 @@ class Cards extends React.PureComponent {
 
   handleToggle = () => {
     this.setState(prevState => ({ openCards: !prevState.openCards }), () => {
-      if (this.state.openCards) {
-        this.checkCardsVisibility();
-      }
+      // if (this.state.openCards) {
+      //   this.checkCardsVisibility();
+      // }
     });
   };
 
@@ -122,11 +122,12 @@ class Cards extends React.PureComponent {
       }
     }
 
-    return data.map(item => (
+    return data.map((item, index) => (
       <Card 
         key={item.id} 
         data={item} 
-        collapsed={collapsedCards.has(item.id.toString())}
+        collapsed={index > 1 ? true : false}
+        // collapsed={collapsedCards.has(item.id.toString())}
       />
     ));
   }

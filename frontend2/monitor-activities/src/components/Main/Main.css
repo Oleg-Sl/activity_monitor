@@ -1,3 +1,5 @@
+
+
 .kanban__main {
   background-color: var(--colorNav);
   grid-area: main;
@@ -12,7 +14,6 @@
   margin: 0 50px 0 50px;
   gap: 50px;
   margin-top: 25px;
-
 }
 
 .kanban__main-wrapper-opacity {
@@ -24,13 +25,47 @@
   opacity: 0.2;
 }
 
+.plan-color {
+  background-image: linear-gradient(#f5f7fa, #ebeff5),
+    radial-gradient(circle at top left, #b388ff, #ff8a80);
+}
+
+.expecting-color {
+  background-image: linear-gradient(#f5f7fa, #ebeff5),
+    radial-gradient(circle at top left, #9575cd, #ff5252);
+}
+
+.readysawing-color, .ready-sawing-color {
+  background-image: linear-gradient(#f5f7fa, #ebeff5),
+    radial-gradient(circle at top left, #ff8a65, #ffb74d);
+}
+
+.sawed-color {
+  background-image: linear-gradient(#f5f7fa, #ebeff5),
+    radial-gradient(circle at top left, #7986cb, #64b5f6);
+}
+
+.awaitingassembly-color, .awaiting-assembly-color {
+  background-image: linear-gradient(#f5f7fa, #ebeff5),
+    radial-gradient(circle at top left, #4fc3f7, #4db6ac);
+}
+
+.karskasisgoing-color, .karskas-is-going-color {
+  background-image: linear-gradient(#f5f7fa, #ebeff5),
+    radial-gradient(circle at top left, #9ccc65, #ffee58);
+}
+
+/* .plan-color {
+  background-image: linear-gradient(#f6f8fc, #f6f8fc),
+    radial-gradient(circle at top left, #c781ff, #e57373);
+}
+
 .expecting-color {
   background-image: linear-gradient(#f6f8fc, #f6f8fc),
     radial-gradient(circle at top left, #c781ff, #e57373);
-  /* background-image: linear-gradient(#e6eaf1, #f6f8fc), radial-gradient(circle at top left, #c781ff, #e57373); */
 }
 
-.ready-sawing-color {
+.readysawing-color, .ready-sawing-color {
   background-image: linear-gradient(#f6f8fc, #f6f8fc),
     radial-gradient(circle at top left, #ff9985, #ffb74e);
 }
@@ -40,15 +75,15 @@
     radial-gradient(circle at top left, #9ea7fc, #6eb4f7);
 }
 
-.awaiting-assembly-color {
+.awaitingassembly-color, .awaiting-assembly-color {
   background-image: linear-gradient(#f6f8fc, #f6f8fc),
     radial-gradient(circle at top left, #81d5ee, #7ed492);
 }
 
-.karskas-is-going-color {
+.karskasisgoing-color, .karskas-is-going-color {
   background-image: linear-gradient(#f6f8fc, #f6f8fc),
     radial-gradient(circle at top left, #a0e672, #fdd835);
-}
+} */
 
 .backlog-color {
   background-image: linear-gradient(#f6f8fc, #f6f8fc),
@@ -459,13 +494,13 @@
 } */
 
 .card__header-production-time {
-  border-radius: 3px;
+  /* border-radius: 3px;
   height: 20px;
   width: 80px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 10px 0 15px 10px;
+  margin: 10px 0 15px 10px; */
 
   /* flex: 0 0 auto;
   width: 60px;
@@ -560,6 +595,12 @@
   font-size: 2em;
   padding: 5px;
   color: var(--colorBarW);
+}
+
+.card__footer-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .card__menu {
@@ -761,6 +802,55 @@
   transition: opacity 300ms ease-in;
 }
 
+@media screen and (max-width: 1100px) {
+  .kanban__main-wrapper {
+    margin: 10px 15px 0 15px;
+    gap: 15px;
+  }
+  .card-wrapper__header {
+    margin: 8px 5px;
+  }
+  .backlog-name {
+    font-size: 10px;
+  }
+  .backlog-dots {
+    font-size: 10px;
+  }
+
+  .card__header {
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    font-size: 1em;
+    height: 25px;
+    padding: 0 2px;
+  }
+  .card__header-production-time {
+    /* border-radius: 3px;
+    height: 20px;
+    width: 35px;
+    margin: 10px 0 15px 10px; */
+  }
+
+  .card {
+    border-radius: 3px;
+    margin-bottom: 0;
+    min-height: 25px;
+    max-height: 150px;
+    flex-shrink: 0;
+  }
+
+  .card__footer-fabric {
+    font-size: 0.7em;
+    padding: 2px;
+  }
+  .card__footer {
+    font-size: 0.7em;
+    padding: 2px;
+  }
+
+
+}
+
 @media screen and (max-width: 820px) {
   .kanban__main-wrapper {
     justify-content: space-around;
@@ -773,3 +863,5 @@
     display: none;
   }
 }
+
+

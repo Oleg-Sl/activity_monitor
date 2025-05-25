@@ -51,8 +51,13 @@ class Main extends React.Component {
   fetchData = async () => {
     try {
       this.setState({ loading: true, error: null });
-
-      const response = await fetch('https://database.tamamm.ru/monitoractivity/monitoring/sawing', {
+      const { page } = this.props;
+      let url = "";
+      if (page === "sawing" || page === "home") {
+        // url = "http://127.0.0.1:8888/monitoring/sawing";
+        url = "https://database.tamamm.ru/monitoractivity/monitoring/sawing";
+      }
+      const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json;charset=utf-8'
@@ -66,16 +71,17 @@ class Main extends React.Component {
       
       const data = await response.json();
       console.log('data = ', data);
-      let kanban_data = [];
-      for (let col_type in data) {
-        let stage_data = columns[col_type];
-        stage_data.data = data[col_type];
-        kanban_data.push(stage_data)
-      }
-      console.log(kanban_data);
+      // let kanban_data = [];
+      // for (let col_type in data) {
+      //   let stage_data = columns[col_type];
+      //   stage_data.data = data[col_type];
+      //   kanban_data.push(stage_data)
+      // }
+      // console.log(kanban_data);
       
       this.setState({ 
-        columns: kanban_data,
+        columns: data,
+        // columns: kanban_data,
         loading: false
       });
       
@@ -121,11 +127,11 @@ class Main extends React.Component {
         <div className="kanban__main-wrapper">
           {columns.map(col => (
             <Cards
-              key={col.type}
-              name={col.name}
-              style={col.style}
-              type={col.type}
-              data={col.data}
+              key={col.stage}
+              name={col.title}
+              style={`${col.stage}-color`}
+              type={col.stage}
+              data={col.productions}
             />
           ))}
         </div>

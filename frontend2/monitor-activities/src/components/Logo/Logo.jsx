@@ -6,7 +6,7 @@ class Logo extends React.Component {
     return (
       <Link to="/">
         <section className="kanban__logo">
-          <span>Activities</span>
+          <span></span>
         </section>
       </Link>
     );

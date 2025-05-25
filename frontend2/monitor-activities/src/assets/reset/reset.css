@@ -53,6 +53,7 @@ body {
     / minmax(auto, 120px)  auto;
 
 }
+
 /* minmax(290px, 1320px) */
 
 .kanban-wrapper {
@@ -67,4 +68,19 @@ a {
   color: var(--colorWhite);
   font-size: 14px;
   margin: auto;
+}
+
+
+
+@media screen and (max-width: 1100px) {
+  :root {
+    --logoHeader: 40px;
+  }
+
+  .kanban {
+    grid-template:
+      "logo header" var(--logoHeader) "sidebar main" auto
+      / minmax(auto, 80px) auto;
+  
+  }
 }

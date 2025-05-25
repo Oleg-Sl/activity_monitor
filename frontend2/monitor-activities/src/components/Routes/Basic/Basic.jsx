@@ -1,17 +1,23 @@
 import React, { lazy, Suspense } from "react";
 
+
 // const Nav = lazy(() => import("../../Nav/Nav.jsx"));
 const Main = lazy(() => import("../../Main/Main.jsx"));
+const Loading = () => <div className="loading">Loading...</div>;
 
 class Basic extends React.Component {
+
+
   render() {
+    const { page } = this.props;
+  
     return (
       <React.Fragment>
         <Suspense fallback={<div className="loading">Loading Nav...</div>}>
           {/* <Nav /> */}
         </Suspense>
         <Suspense fallback={<div className="loading">Loading Main...</div>}>
-          <Main />
+          <Main page={page} />
           {/* <Main
             board={board}
             selected={selected}
@@ -25,6 +31,11 @@ class Basic extends React.Component {
     );
   }
 }
+
+// const Main = Loadable({
+//   loader: () => import("../../Main/Main.jsx"),
+//   loading: Loading
+// });
 
 export default Basic;
 
