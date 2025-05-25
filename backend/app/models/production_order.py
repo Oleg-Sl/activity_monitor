@@ -50,7 +50,7 @@ class ProductionOrder(Base):
 
     allocated_hours: Mapped[Optional[float]] = mapped_column(Float, comment="Выделено часов на стадии")
 
-    stage_histories = relationship("StageHistory", back_populates="production_order")
+    # stage_histories = relationship("StageHistory", back_populates="production_order")
 
     production_stage_history = relationship("ProductionStageHistory", backref="production_order")
 
