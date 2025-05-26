@@ -101,6 +101,7 @@ class ProductionScheduleService:
     async def save_productions_to_db(self, production_ids: List[int]):
         productions = await self.get_production(production_ids)
         for production in productions:
+            # print('production = ', production)
             await self._save_production_and_stage_history(production)
 
     async def _save_production_and_stage_history(self, production: ProductScheduleInSchema):
@@ -111,7 +112,8 @@ class ProductionScheduleService:
 
         old_order = await self.production_repo.get(production.id)
         old_stage_id = old_order.stage_id if old_order else None
-
+    
+        # print('old_order = ', old_order)
         if old_order:
             new_order_id = await self.production_repo.edit_one(production.id, production.model_dump())
         else:

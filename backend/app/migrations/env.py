@@ -19,7 +19,7 @@ if config.config_file_name is not None:
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 from app.models.stage import Stages
-from app.models.stage_history import StageHistory
+# from app.models.stage_history import StageHistory
 from app.models.work_calendar import WorkCalendar
 from app.models.credential import Credentials
 from app.models.production_order import ProductionOrder

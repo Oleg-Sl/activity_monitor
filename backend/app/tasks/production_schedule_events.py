@@ -5,7 +5,8 @@ from app.db.session import async_session_maker
 from app.infrastructure.bitrix_event_client import BitrixEventFetcher
 from app.services.entities.production_schedule_service import ProductionScheduleService
 from app.constants.product_schedule import PRODUCTION_SCHEDULE_EVENT_NAMES
-from app.repositories.production_schedule_repository import ProductionScheduleRepository
+# from app.repositories.production_schedule_repository import ProductionScheduleRepository
+from app.repositories.production_order_repository import ProductionOrderRepository
 from app.repositories.stage_history_repository import StageHistoryRepository
 from app.repositories.stage_repository import StageRepository
 from app.repositories.work_calendar_repository import WorkCalendarRepository
@@ -18,14 +19,16 @@ async def sync_production_schedule_events_task():
         bitrix_client = get_bitrix_client(session)
         fetcher = BitrixEventFetcher(bitrix_client)
 
-        production_schedule_repository = ProductionScheduleRepository(session)
+        # production_repository = ProductionScheduleRepository(session)
+        production_repository = ProductionOrderRepository(session)
+
         stage_history_repository = StageHistoryRepository(session)
         stage_repository = StageRepository(session)
         work_calendar_repository = WorkCalendarRepository(session)
 
         service = ProductionScheduleService(
             bitrix_client,
-            production_schedule_repository,
+            production_repository,
             stage_history_repository,
             stage_repository,
             work_calendar_repository
@@ -33,6 +36,7 @@ async def sync_production_schedule_events_task():
 
         for event_name in PRODUCTION_SCHEDULE_EVENT_NAMES:
             async for production_schedule_ids in fetcher.fetch_events(event_name):
+                print('production_schedule_ids = ', production_schedule_ids)
                 result = await service.save_productions_to_db(production_schedule_ids)
 
         # print('*'*88)
