@@ -22,7 +22,9 @@ from app.infrastructure.bitrix_event_client import BitrixEventFetcher
 from app.services.entities.production_order_service import ProductionOrderService
 from app.constants.production_order import PRODUCTION_ORDER_EVENT_NAMES
 from app.repositories.production_order_repository import ProductionOrderRepository
-from app.repositories.stage_history_repository import StageHistoryRepository
+# from app.repositories.stage_history_repository import StageHistoryRepository
+from app.repositories.production_history_repository import ProductionHistoryRepository
+
 from app.repositories.work_calendar_repository import WorkCalendarRepository
 from app.repositories.stage_repository import StageRepository
 
@@ -150,7 +152,7 @@ async def sync_production_events_task():
         bitrix_client = get_bitrix_client(session)
         fetcher = BitrixEventFetcher(bitrix_client)
         production_order_repository = ProductionOrderRepository(session)
-        stage_history_repository = StageHistoryRepository(session)
+        stage_history_repository = ProductionHistoryRepository(session)
         stage_repository = StageRepository(session)
         work_calendar_repository = WorkCalendarRepository(session)
         

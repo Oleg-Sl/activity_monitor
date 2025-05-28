@@ -11,7 +11,9 @@ from app.schemas.product_schedule_schema import ProductScheduleInSchema
 from app.services.file_service import FileServiceFactory
 # from app.repositories.production_schedule_repository import ProductionScheduleRepository
 from app.repositories.production_order_repository import ProductionOrderRepository
-from app.repositories.stage_history_repository import StageHistoryRepository
+# from app.repositories.stage_history_repository import StageHistoryRepository
+from app.repositories.production_history_repository import ProductionHistoryRepository
+
 from app.repositories.work_calendar_repository import WorkCalendarRepository
 from app.repositories.stage_repository import StageRepository
 # from app.models.stage import Stages
@@ -22,7 +24,7 @@ class ProductionScheduleService:
         self,
         bitrix_client: InterfaceBitrixClient,
         production_repo: ProductionOrderRepository,
-        history_repo: StageHistoryRepository,
+        history_repo: ProductionHistoryRepository,
         stage_repo: StageRepository,
         calendar_repo: WorkCalendarRepository,
     ):
@@ -105,6 +107,8 @@ class ProductionScheduleService:
             await self._save_production_and_stage_history(production)
 
     async def _save_production_and_stage_history(self, production: ProductScheduleInSchema):
+        # print('production.id = ', production.id)
+
         # Поиск идентификатора стадии по его текстовому представлению
         new_stage = await self.stage_repo.get_by_status_id(production.stage_id_str)
         new_stage_id = new_stage.id if new_stage else None
@@ -112,10 +116,32 @@ class ProductionScheduleService:
 
         old_order = await self.production_repo.get(production.id)
         old_stage_id = old_order.stage_id if old_order else None
+        # print('old_order = ', old_order)
+
     
         # print('old_order = ', old_order)
         if old_order:
             new_order_id = await self.production_repo.edit_one(production.id, production.model_dump())
         else:
             new_order_id = await self.production_repo.add_one(production.model_dump())
+
+        # self.history_repo.add_one({
+        #     'production_order_id': production_order_id,
+        #     'stage_id_str': stage_id_str,
+        #     'moved_time': moved_time
+        # })
+
+        # print({
+        #     'production_order_id': new_order_id,
+        #     'stage_id_str': old_order.stage_id_str,
+        #     # 'stage_id_str': production.stage_id_str,
+        #     'moved_time': production.moved_time
+        # })
+        res = await self.history_repo.add_one({
+            'production_order_id': new_order_id,
+            'stage_id_str': old_order.stage_id_str,
+            # 'stage_id_str': production.stage_id_str,
+            'moved_time': production.moved_time
+        })
         print('new_order_id = ', new_order_id)
+        print('res = ', res)

@@ -9,7 +9,9 @@ from app.schemas.product_order_schema import ProductOrderInSchema
 from app.infrastructure.file_downloader.file_downloader import FileDownloader
 from app.services.file_service import FileServiceFactory
 from app.repositories.production_order_repository import ProductionOrderRepository
-from app.repositories.stage_history_repository import StageHistoryRepository
+# from app.repositories.stage_history_repository import StageHistoryRepository
+from app.repositories.production_history_repository import ProductionHistoryRepository
+
 from app.repositories.work_calendar_repository import WorkCalendarRepository
 from app.repositories.stage_repository import StageRepository
 from app.models.stage import Stages
@@ -20,7 +22,7 @@ class ProductionOrderService:
         self,
         bitrix_client: InterfaceBitrixClient,
         order_repo: ProductionOrderRepository,
-        history_repo: StageHistoryRepository,
+        history_repo: ProductionHistoryRepository,
         stage_repo: StageRepository,
         calendar_repo: WorkCalendarRepository,
     ):
