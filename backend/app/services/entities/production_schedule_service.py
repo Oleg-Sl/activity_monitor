@@ -137,11 +137,13 @@ class ProductionScheduleService:
         #     # 'stage_id_str': production.stage_id_str,
         #     'moved_time': production.moved_time
         # })
-        res = await self.history_repo.add_one({
-            'production_order_id': new_order_id,
-            'stage_id_str': old_order.stage_id_str,
-            # 'stage_id_str': production.stage_id_str,
-            'moved_time': production.moved_time
-        })
+        if old_stage_id != new_stage_id:
+            res = await self.history_repo.add_one({
+                'production_order_id': new_order_id,
+                'stage_id_str': old_order.stage_id_str,
+                # 'stage_id_str': production.stage_id_str,
+                'moved_time': production.moved_time
+            })
+
         print('new_order_id = ', new_order_id)
         print('res = ', res)
