@@ -25,9 +25,12 @@ class ProductionOrderRepository(AbstractRepository):
             print(f"Ошибка при добавлении: {e}")
             raise
 
-    async def edit_one(self, id: int, data: dict) -> int:
+    async def edit_one(self, id: int, entity_type_id: int, data: dict) -> int:
         try:
-            stmt = update(ProductionOrder).where(ProductionOrder.id == id).values(**data).returning(ProductionOrder.id)
+            stmt = (update(ProductionOrder)
+                    .where(and_(ProductionOrder.id == id, ProductionOrder.entity_type_id == entity_type_id))
+                    .values(**data)
+                    .returning(ProductionOrder.id))
             result = await self.session.execute(stmt)
             await self.session.commit()
             return result.scalar_one()

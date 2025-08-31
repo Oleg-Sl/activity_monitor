@@ -132,7 +132,7 @@ class ProductionOrderService:
         old_stage_id = old_order.stage_id if old_order else None
 
         if old_order:
-            order_id = await self.order_repo.edit_one(order.id, order.model_dump())
+            order_id = await self.order_repo.edit_one(order.id, order.entity_type_id, order.model_dump())
         else:
             order_id = await self.order_repo.add_one(order.model_dump())
 

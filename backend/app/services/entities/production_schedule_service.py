@@ -120,7 +120,7 @@ class ProductionScheduleService:
 
         # print('old_order = ', old_order)
         if old_order:
-            new_order_id = await self.production_repo.edit_one(production.id, production.model_dump())
+            new_order_id = await self.production_repo.edit_one(production.id, production.entity_type_id, production.model_dump())
         else:
             new_order_id = await self.production_repo.add_one(production.model_dump())
 
