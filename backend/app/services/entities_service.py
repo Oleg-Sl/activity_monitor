@@ -1,7 +1,7 @@
 from typing import List
 
 class BitrixEventClient:
-    async def get_entities(self, entities_ids: List[int]) -> List[dict]:
+    async def get_entities(self, entity_ids: List[int]) -> List[dict]:
         if not entity_ids:
             return []
         entities = await self.entity_workshop_service.get_entities(entity_ids)

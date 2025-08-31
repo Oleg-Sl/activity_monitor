@@ -1,3 +1,4 @@
+import time
 from typing import List, Optional
 from pydantic import ValidationError
 
@@ -35,6 +36,23 @@ class ProductionOrderService:
         self.stage_repo = stage_repo
         self.calendar_repo = calendar_repo
 
+    async def sync_production(self, date_start, date_end):
+        print(date_start, date_end)
+        production_orders = self.filter_production_orders({
+            '>=updatedTime': date_start,
+            '<=updatedTime': date_end,
+        })
+        result = []
+        async for order in production_orders:
+            await self._save_order_and_stage_history(order)
+
+        print(len(result))
+
+    async def save_orders_to_db(self, production_orders_ids: List[int]):
+        production_orders = await self.get_production_orders(production_orders_ids)
+        for order in production_orders:
+            await self._save_order_and_stage_history(order)
+
     async def get_production_orders(self, production_orders_ids: List[int]) -> List[ProductOrderInSchema]:
         if not production_orders_ids:
             return []
@@ -57,20 +75,41 @@ class ProductionOrderService:
             return []
 
     async def filter_production_orders(self, filter_data: dict):
+        result = []
         try:
-            raw_production_orders = [production_order async for production_order in self.bitrix_client.get_entities(self.entity_type_id, filter_data)]
+            # raw_production_orders = [
+            #     production_order
+            #     async for production_order in self.bitrix_client.get_entities(self.entity_type_id, filter_data)
+            # ]
             errors = []
 
-            for production_order in raw_production_orders:
-                # print('===> ', production_order)
+            # for production_order in raw_production_orders:
+            async for production_order in self.bitrix_client.get_entities(self.entity_type_id, filter_data):
+
                 try:
                     order = ProductOrderInSchema(**production_order)
                     production_data = await self._prepare_product_order_data(order)
                     yield production_data
                 except ValidationError as e:
-                    print(e)
-                    errors.append({"data": production_order, "error": e.errors()})
+                    print(f"Ошибка валидации заказа {production_order.get('id')}: {e}")
+                    # Можно добавить логирование ошибок
+                    continue
+                except Exception as e:
+                    print(f"Ошибка обработки заказа {production_order.get('id')}: {e}")
+                    continue
+                # result.append(production_order)
+                # print("result = ", len(result))
+                # # yield production_order
+                # # print('===> ', production_order)
+                # try:
+                #     order = ProductOrderInSchema(**production_order)
+                #     production_data = await self._prepare_product_order_data(order)
+                #     yield production_data
+                # except ValidationError as e:
+                #     print("err 1 = ", e)
+                #     errors.append({"data": production_order, "error": e.errors()})
         except Exception as e:
+            print("err 2 = ", e)
             pass
 
     async def _prepare_product_order_data(self, production_order: ProductOrderInSchema) -> ProductOrderInSchema:
@@ -83,20 +122,6 @@ class ProductionOrderService:
 
         return production_order
 
-    async def sync_production(self, date_start, date_end):
-        production_orders = self.filter_production_orders({
-            '>=updatedTime': date_start,
-            '<=updatedTime': date_end,
-        })
-        async for order in production_orders:
-            # print('>>> = ', order)
-            await self._save_order_and_stage_history(order)
-
-    async def save_orders_to_db(self, production_orders_ids: List[int]):
-        production_orders = await self.get_production_orders(production_orders_ids)
-        for order in production_orders:
-            await self._save_order_and_stage_history(order)
-
     async def _save_order_and_stage_history(self, order: ProductOrderInSchema):
         # Поиск идентификатора стадии по его текстовому представлению
         new_stage = await self.stage_repo.get_by_status_id(order.stage_id_str)
@@ -107,10 +132,14 @@ class ProductionOrderService:
         old_stage_id = old_order.stage_id if old_order else None
 
         if old_order:
-            new_order_id = await self.order_repo.edit_one(order.id, order.model_dump())
+            order_id = await self.order_repo.edit_one(order.id, order.model_dump())
         else:
-            new_order_id = await self.order_repo.add_one(order.model_dump())
-        print('new_order_id = ', new_order_id)
+            order_id = await self.order_repo.add_one(order.model_dump())
+
+        print(order.id)
+        print('order_id = ', order_id)
+        # print('stage_id: ', old_stage_id if old_stage_id else '-', ' -> ', new_stage_id)
+        print('stage_id: ', old_order.stage_id_str if old_order else '-', ' -> ', order.stage_id_str)
 
         # self.order_repo.commit()
 

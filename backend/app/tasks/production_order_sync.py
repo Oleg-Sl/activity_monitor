@@ -1,32 +1,65 @@
-# import os
-# import logging
+
 import asyncio
-# import pprint
-# from typing import List, Any, Optional
-# from collections import defaultdict
-# from logging.handlers import TimedRotatingFileHandler
-# from pydantic import BaseModel, ConfigDict, Field, field_validator
+import datetime
 
 from app.services.bitrix24.factory import get_bitrix_client
-# from app.bitrix24.bitrix_client import InterfaceBitrixClient
 from app.db.session import async_session_maker
-# # from app.schemas.entity import EntitySchema
-# from app.schemas.work_order import WorkOrderSchema
-# # from app.repositories.entity_repository import EntityRepository
-# from app.repositories.workorder_repository import WorkOrderRepository
-# from app.models.work_order import WorkOrder, save_stage_history
-# from app.parameters.params import WORKSHOP_TYPE_OF_PRODUCT, PRODUCT_TYPE_DATA, ALLOCATED_HOURS, ZAKUP_FIELDS
-# from app.services.file_service import FileServiceFactory
-
-from app.infrastructure.bitrix_event_client import BitrixEventFetcher
 from app.services.entities.production_order_service import ProductionOrderService
-from app.constants.production_order import PRODUCTION_ORDER_EVENT_NAMES
 from app.repositories.production_order_repository import ProductionOrderRepository
-# from app.repositories.stage_history_repository import StageHistoryRepository
 from app.repositories.production_history_repository import ProductionHistoryRepository
 
 from app.repositories.work_calendar_repository import WorkCalendarRepository
 from app.repositories.stage_repository import StageRepository
+
+
+# получение данных из очереди событий
+async def sync_production_orders_task():
+    async with async_session_maker() as session:
+        bitrix_client = get_bitrix_client(session)
+        production_order_repository = ProductionOrderRepository(session)
+        stage_history_repository = ProductionHistoryRepository(session)
+        stage_repository = StageRepository(session)
+        work_calendar_repository = WorkCalendarRepository(session)
+
+        service = ProductionOrderService(
+            bitrix_client,
+            production_order_repository,
+            stage_history_repository,
+            stage_repository,
+            work_calendar_repository
+        )
+
+        start_date = (datetime.datetime.now().date() - datetime.timedelta(days=200)).isoformat()
+        end_date = datetime.datetime.now().date().isoformat()
+        await service.sync_production(start_date, end_date)
+
+
+if __name__ == "__main__":
+    asyncio.run(sync_production_orders_task())
+
+
+# python -m app.tasks.production_order_sync
+# .\venv\Scripts\activate
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # # Создание директории logs, если её нет
 # os.makedirs("logs", exist_ok=True)
@@ -83,7 +116,7 @@ from app.repositories.stage_repository import StageRepository
 #         except Exception as e:
 #             logger.exception("Failed to fetch workshop entities: %s", e)
 #             return []
-    
+
 #     async def update_entity(self, entity: WorkOrderSchema) -> WorkOrderSchema:
 #         image_data = await self.uploads_image(entity.image_url)
 #         if image_data:
@@ -144,33 +177,3 @@ from app.repositories.stage_repository import StageRepository
 
 #             await asyncio.sleep(TIMEOUT)
 #             break
-
-
-# получение данных из очереди событий
-async def sync_production_orders_task():
-    async with async_session_maker() as session:
-        bitrix_client = get_bitrix_client(session)
-        fetcher = BitrixEventFetcher(bitrix_client)
-        production_order_repository = ProductionOrderRepository(session)
-        stage_history_repository = ProductionHistoryRepository(session)
-        stage_repository = StageRepository(session)
-        work_calendar_repository = WorkCalendarRepository(session)
-        
-        service = ProductionOrderService(
-            bitrix_client,
-            production_order_repository,
-            stage_history_repository,
-            stage_repository,
-            work_calendar_repository
-        )
-
-        await service.sync_production('2025-04-01', '2025-06-05')
-
-
-
-if __name__ == "__main__":
-    asyncio.run(sync_production_orders_task())
-
-
-# python -m app.tasks.production_order_sync
-# .\venv\Scripts\activate

@@ -118,7 +118,6 @@ class ProductionScheduleService:
         old_stage_id = old_order.stage_id if old_order else None
         # print('old_order = ', old_order)
 
-    
         # print('old_order = ', old_order)
         if old_order:
             new_order_id = await self.production_repo.edit_one(production.id, production.model_dump())
@@ -145,5 +144,9 @@ class ProductionScheduleService:
                 'moved_time': production.moved_time
             })
 
-        print('new_order_id = ', new_order_id)
+        # print('new_order_id = ', new_order_id)
+        # print(new_order_id)
+        print('order_id = ', new_order_id)
+        print('stage_id: ', old_stage_id if old_stage_id else '-', ' -> ', new_stage_id)
+
         # print('res = ', res)

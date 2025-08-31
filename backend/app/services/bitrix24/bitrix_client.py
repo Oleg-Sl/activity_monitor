@@ -1,4 +1,4 @@
-import pprint
+import time
 from abc import ABC, abstractmethod
 from collections.abc import AsyncGenerator
 from pydantic import BaseModel, ValidationError
@@ -65,15 +65,20 @@ class InterfaceBitrixClient(ABC):
         entity_id = 0
         while True:
             filter_params[">id"] = entity_id
-            response = await self.call("crm.item.list", {
+            params = {
                 "entityTypeId": entityTypeId,
                 "filter": filter_params,
                 "order": {
                     "id": "ASC"
-                }
-            })
-            print('total = ', response.get('total'))
+                },
+                "start": -1
+            }
+            # print(params)
+            response = await self.call("crm.item.list", params)
+            # print('total = ', response.get('total'))
             entities = response.get("result", {}).get("items", [])
+            # print('entities = ', len(entities))
+
             if not entities:
                 break
 
@@ -86,6 +91,7 @@ class InterfaceBitrixClient(ABC):
                 #     continue
 
             entity_id = entities[-1]["id"]
+            time.sleep(5)
     
     async def get_entities_by_ids(self, entityTypeId: str, entity_ids: list[int]):
         cmd = {

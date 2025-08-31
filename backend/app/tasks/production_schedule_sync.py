@@ -1,5 +1,6 @@
 
 import asyncio
+import datetime
 from app.services.bitrix24.factory import get_bitrix_client
 from app.db.session import async_session_maker
 
@@ -33,7 +34,10 @@ async def sync_production_schedules_task():
             work_calendar_repository
         )
 
-        await service.sync_production('2025-04-01', '2025-06-05')
+        start_date = (datetime.datetime.now().date() - datetime.timedelta(days=200)).isoformat()
+        end_date = datetime.datetime.now().date().isoformat()
+        await service.sync_production(start_date, end_date)
+        # await service.sync_production('2025-04-01', '2025-06-05')
 
 
 if __name__ == "__main__":

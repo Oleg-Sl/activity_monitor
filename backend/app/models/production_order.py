@@ -11,6 +11,9 @@ from datetime import datetime
 from app.db.session import Base
 
 
+# Смарт процесс в "производство - цех"
+
+
 class ProductionOrder(Base):
     __tablename__ = 'production_order'
 
@@ -63,6 +66,6 @@ class ProductionOrder(Base):
             f"name='{self.name}')>"
         )
 
-# alembic revision --autogenerate -m "initial"
-# alembic revision --autogenerate -m "Add fields to entity model"
-# alembic upgrade head
+# python -m alembic revision --autogenerate -m "initial"
+# python -m alembic revision --autogenerate -m "Add fields to entity model"
+# python -m alembic upgrade head

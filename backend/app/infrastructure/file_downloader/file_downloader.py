@@ -3,6 +3,7 @@ import os
 import mimetypes
 import re
 import asyncio
+from aiohttp import TCPConnector
 from pathlib import Path
 from uuid import uuid4
 from typing import Optional
@@ -18,40 +19,83 @@ class FileDownloader(IFileDownloader):
         self.base_storage_path.mkdir(parents=True, exist_ok=True)
 
     async def download_file(
-        self, 
-        url: str, 
-        filename: Optional[str] = None,
-        compress_image: bool = True,
-        quality: int = 75
+            self,
+            url: str,
+            filename: Optional[str] = None,
+            compress_image: bool = True,
+            quality: int = 75
     ) -> str:
-
         folder_path = self.base_storage_path
 
         if filename is None:
             filename = f"{uuid4().hex}"
 
-        file_path = None
+        try:
+            async with aiohttp.ClientSession(connector=TCPConnector(ssl=False)) as session:
+                async with session.get(url, ssl=False) as response:
+                    response.raise_for_status()
 
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url) as response:
-                response.raise_for_status()
+                    extension = self._get_extension_from_response(response)
+                    filename += extension
+                    file_path = folder_path / filename
 
-                extension = self._get_extension_from_response(response)
-                filename += extension
-                file_path = folder_path / filename
+                    folder_path.mkdir(parents=True, exist_ok=True)
 
-                with open(file_path, 'wb') as f:
-                    while True:
-                        chunk = await response.content.read(1024)
-                        if not chunk:
-                            break
-                        f.write(chunk)
+                    with open(file_path, 'wb') as f:
+                        while True:
+                            chunk = await response.content.read(1024)
+                            if not chunk:
+                                break
+                            f.write(chunk)
 
-        if compress_image and self._is_image(file_path):
-            self._compress_image(file_path, quality)
+            if compress_image and self._is_image(file_path):
+                self._compress_image(file_path, quality)
+            return str(file_path)
+        except aiohttp.ClientError as e:
+            print(f"Ошибка HTTP при скачивании файла {url}: {e}")
+            return None
+        except IOError as e:
+            print(f"Ошибка записи файла {filename}: {e}")
+            return None
+        except Exception as e:
+            print(f"Неожиданная ошибка при скачивании {url}: {e}")
+            return None
 
-        # relative_path = os.path.relpath(file_path, self.base_storage_path)
-        return str(self.base_storage_path / file_path)
+    # async def download_file(
+    #     self,
+    #     url: str,
+    #     filename: Optional[str] = None,
+    #     compress_image: bool = True,
+    #     quality: int = 75
+    # ) -> str:
+    #
+    #     folder_path = self.base_storage_path
+    #
+    #     if filename is None:
+    #         filename = f"{uuid4().hex}"
+    #
+    #     file_path = None
+    #
+    #     async with aiohttp.ClientSession() as session:
+    #         async with session.get(url) as response:
+    #             response.raise_for_status()
+    #
+    #             extension = self._get_extension_from_response(response)
+    #             filename += extension
+    #             file_path = folder_path / filename
+    #
+    #             with open(file_path, 'wb') as f:
+    #                 while True:
+    #                     chunk = await response.content.read(1024)
+    #                     if not chunk:
+    #                         break
+    #                     f.write(chunk)
+    #
+    #     if compress_image and self._is_image(file_path):
+    #         self._compress_image(file_path, quality)
+    #
+    #     # relative_path = os.path.relpath(file_path, self.base_storage_path)
+    #     return str(self.base_storage_path / file_path)
 
     def _is_image(self, file_path: Path) -> bool:
         try:

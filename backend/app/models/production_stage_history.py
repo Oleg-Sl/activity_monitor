@@ -26,24 +26,3 @@ class ProductionStageHistory(Base):
 # alembic revision --autogenerate -m "initial"
 # alembic revision --autogenerate -m "Add table of stage histories"
 # alembic upgrade head
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

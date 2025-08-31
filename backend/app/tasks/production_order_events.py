@@ -155,7 +155,7 @@ async def sync_production_events_task():
         stage_history_repository = ProductionHistoryRepository(session)
         stage_repository = StageRepository(session)
         work_calendar_repository = WorkCalendarRepository(session)
-        
+
         service = ProductionOrderService(
             bitrix_client,
             production_order_repository,
@@ -168,7 +168,6 @@ async def sync_production_events_task():
             async for production_orders_ids in fetcher.fetch_events(event_name):
                 # production_orders = await service.get_production_orders(production_orders_ids)
                 result = await service.save_orders_to_db(production_orders_ids)
-
 
         # production_orders = await service.get_production_orders([3497, 3269, 3453, 3455, 2833])
         # result = await service.save_orders_to_db([3497, 2833])

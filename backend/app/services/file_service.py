@@ -18,7 +18,7 @@ class FileService:
             return None
 
         image_path = await self.file_downloader.download_file(url, filename)
-        relative_image_path = str(Path(image_path).relative_to(self.base_path))
+        relative_image_path = str(Path(image_path).relative_to(self.base_path)) if image_path else None
 
         return {
             "image_token": image_token,

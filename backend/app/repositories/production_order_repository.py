@@ -36,7 +36,7 @@ class ProductionOrderRepository(AbstractRepository):
             print(f"Ошибка при редактировании: {e}")
             raise
 
-    async def filter(self, *args):
+    async def filter(self, *args) -> List[ProductionOrder]:
         stmt = select(ProductionOrder).where(and_(*args)).order_by(ProductionOrder.production_date)
         result = await self.session.execute(stmt)
         return result.scalars().all()
