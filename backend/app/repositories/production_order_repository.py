@@ -25,19 +25,40 @@ class ProductionOrderRepository(AbstractRepository):
             print(f"Ошибка при добавлении: {e}")
             raise
 
-    async def edit_one(self, id: int, entity_type_id: int, data: dict) -> int:
+
+    async def edit_one(self, entity_id: int, entity_type_id: int, data: dict) -> int:
         try:
-            stmt = (update(ProductionOrder)
-                    .where(and_(ProductionOrder.id == id, ProductionOrder.entity_type_id == entity_type_id))
-                    .values(**data)
-                    .returning(ProductionOrder.id))
-            result = await self.session.execute(stmt)
+            query = (
+                update(ProductionOrder)
+                .where(
+                    ProductionOrder.id == entity_id,
+                    ProductionOrder.entity_type_id == entity_type_id
+                )
+                .values(**data)
+                .returning(ProductionOrder.id)
+            )
+
+            result = await self.session.execute(query)
             await self.session.commit()
-            return result.scalar_one()
-        except SQLAlchemyError as e:
+
+            return result.scalar_one_or_none()
+
+        except Exception as e:
             await self.session.rollback()
-            print(f"Ошибка при редактировании: {e}")
-            raise
+            print(f"Ошибка при обновлении записи {entity_id}: {e}")
+            return None
+    #     try:
+    #         stmt = (update(ProductionOrder)
+    #                 .where(and_(ProductionOrder.id == id, ProductionOrder.entity_type_id == entity_type_id))
+    #                 .values(**data)
+    #                 .returning(ProductionOrder.id))
+    #         result = await self.session.execute(stmt)
+    #         await self.session.commit()
+    #         return result.scalar_one()
+    #     except SQLAlchemyError as e:
+    #         await self.session.rollback()
+    #         print(f"Ошибка при редактировании: {e}")
+    #         raise
 
     async def filter(self, *args) -> List[ProductionOrder]:
         stmt = select(ProductionOrder).where(and_(*args)).order_by(ProductionOrder.production_date)
