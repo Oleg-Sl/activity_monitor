@@ -18,6 +18,8 @@ class ProductionOrderRepository(AbstractRepository):
         try:
             stmt = insert(ProductionOrder).values(**data).returning(ProductionOrder.id)
             result = await self.session.execute(stmt)
+            print(data, result)
+
             await self.session.commit()
             return result.scalar_one()
         except SQLAlchemyError as e:
@@ -31,11 +33,11 @@ class ProductionOrderRepository(AbstractRepository):
             query = (
                 update(ProductionOrder)
                 .where(
-                    ProductionOrder.id == entity_id,
+                    ProductionOrder.entity_id == entity_id,
                     ProductionOrder.entity_type_id == entity_type_id
                 )
                 .values(**data)
-                .returning(ProductionOrder.id)
+                .returning(ProductionOrder.entity_id)
             )
 
             result = await self.session.execute(query)
@@ -65,8 +67,19 @@ class ProductionOrderRepository(AbstractRepository):
         result = await self.session.execute(stmt)
         return result.scalars().all()
 
-    async def get(self, production_order_id: int) -> ProductionOrder:
-        stmt = select(ProductionOrder).where(ProductionOrder.id == production_order_id)
+    async def get(self, entity_id: int) -> ProductionOrder:
+        stmt = select(ProductionOrder).where(ProductionOrder.entity_id == entity_id)
+        result = await self.session.execute(stmt)
+        return result.scalars().first()
+
+    async def find_one(self, entity_id: int, entity_type_id: int) -> ProductionOrder:
+        stmt = (
+            select(ProductionOrder)
+            .where(
+                ProductionOrder.entity_id == entity_id,
+                ProductionOrder.entity_type_id == entity_type_id
+            )
+        )
         result = await self.session.execute(stmt)
         return result.scalars().first()
 
@@ -81,7 +94,7 @@ class ProductionOrderRepository(AbstractRepository):
     async def commit(self):
         await self.session.commit()
 
-    async def create_or_update(self, data: dict) -> int:
+    async def create_or_update(self, data: dict):
         new_stage_id = await self._get_stage_by_id_str(data['stage_id_str'])
         if new_stage_id is not None:
             data['stage_id'] = new_stage_id
@@ -93,9 +106,20 @@ class ProductionOrderRepository(AbstractRepository):
             old_stage_id = old_production_order.stage_id
 
         if not old_production_order:
-            stmt = insert(ProductionOrder).values(**data).returning(ProductionOrder).execution_options(synchronize_session="fetch")
+            stmt = (
+                insert(ProductionOrder)
+                .values(**data)
+                .returning(ProductionOrder)
+                .execution_options(synchronize_session="fetch")
+            )
         else:
-            stmt = update(ProductionOrder).where(ProductionOrder.id == data['id']).values(**data).returning(ProductionOrder).execution_options(synchronize_session="fetch")
+            stmt = (
+                update(ProductionOrder)
+                .where(ProductionOrder.entity_id == data['id'])
+                .values(**data)
+                .returning(ProductionOrder)
+                .execution_options(synchronize_session="fetch")
+            )
 
         result = await self.session.execute(stmt)
         await self.session.flush()

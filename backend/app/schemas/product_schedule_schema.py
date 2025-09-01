@@ -8,7 +8,7 @@ from app.constants.product_schedule import PRODUCTION_SCHEDULE_TYPE_OF_PRODUCT
 class ProductScheduleInSchema(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="ignore")
 
-    id: int = Field(..., validation_alias='id')
+    entity_id: int = Field(..., validation_alias='id')
     title: str = Field(..., validation_alias='title')
     entity_type_id: int = Field(..., validation_alias='entityTypeId')
 

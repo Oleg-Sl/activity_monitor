@@ -17,7 +17,8 @@ from app.db.session import Base
 class ProductionOrder(Base):
     __tablename__ = 'production_order'
 
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, comment="Идентификатор из битрикс")
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, comment="Идентификатор", autoincrement=True)
+    entity_id: Mapped[int] = mapped_column(Integer, comment="Идентификатор из битрикс")
     title: Mapped[Optional[str]] = mapped_column(String(255), comment="Название смарт-процесса в битрикс")
     entity_type_id: Mapped[Optional[int]] = mapped_column(Integer, comment="Идентификатор типа смарт процесса")
 

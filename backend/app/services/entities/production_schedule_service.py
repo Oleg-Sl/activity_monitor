@@ -66,21 +66,33 @@ class ProductionScheduleService:
 
     async def filter_production_orders(self, filter_data: dict):
         try:
-            raw_productions = [production async for production in self.bitrix_client.get_entities(self.entity_type_id, filter_data)]
-            errors = []
-
-            for raw_production in raw_productions:
-                # print('===> ', raw_production)
+            async for entity in self.bitrix_client.get_entities(self.entity_type_id, filter_data):
                 try:
-                    # print('ufCrm9_1737034529 = ', raw_production['ufCrm9_1737034529'])
-                    production = ProductScheduleInSchema(**raw_production)
+                    production = ProductScheduleInSchema(**entity)
                     yield production
                 except ValidationError as e:
-                    pprint(e)
-                    print(raw_production)
-                    errors.append({"data": raw_production, "error": e.errors()})
+                    print(f"Ошибка валидации заказа {entity.get('id')}: {e}")
+                except Exception as e:
+                    print(f"Ошибка обработки заказа {entity.get('id')}: {e}")
         except Exception as e:
+            print("err 2 = ", e)
             pass
+        # try:
+        #     raw_productions = [production async for production in self.bitrix_client.get_entities(self.entity_type_id, filter_data)]
+        #     errors = []
+        #
+        #     for raw_production in raw_productions:
+        #         # print('===> ', raw_production)
+        #         try:
+        #             # print('ufCrm9_1737034529 = ', raw_production['ufCrm9_1737034529'])
+        #             production = ProductScheduleInSchema(**raw_production)
+        #             yield production
+        #         except ValidationError as e:
+        #             pprint(e)
+        #             print(raw_production)
+        #             errors.append({"data": raw_production, "error": e.errors()})
+        # except Exception as e:
+        #     pass
 
 
     async def sync_production(self, date_start, date_end):
@@ -88,8 +100,11 @@ class ProductionScheduleService:
             '>=updatedTime': date_start,
             '<=updatedTime': date_end,
         })
+        result = []
         async for production in productions:
             await self._save_production_and_stage_history(production)
+            result.append(production)
+        print("result = ", len(result))
 
     # async def _prepare_product_order_data(self, production_order: ProductScheduleInSchema) -> ProductScheduleInSchema:
     #     image_url = production_order.image_url
@@ -114,13 +129,16 @@ class ProductionScheduleService:
         new_stage_id = new_stage.id if new_stage else None
         production.stage_id = new_stage_id
 
-        old_order = await self.production_repo.get(production.id)
-        old_stage_id = old_order.stage_id if old_order else None
-        # print('old_order = ', old_order)
+        # old_order = await self.production_repo.get(production.id)
+        old_order = await self.production_repo.find_one(production.entity_id, production.entity_type_id)
 
+        old_stage_id = old_order.stage_id if old_order else None
+
+        # print("+"*88)
         # print('old_order = ', old_order)
+        # print('production.entity_type_id = ', production.entity_type_id)
         if old_order:
-            new_order_id = await self.production_repo.edit_one(production.id, production.entity_type_id, production.model_dump())
+            new_order_id = await self.production_repo.edit_one(production.entity_id, production.entity_type_id, production.model_dump())
         else:
             new_order_id = await self.production_repo.add_one(production.model_dump())
 
@@ -147,6 +165,7 @@ class ProductionScheduleService:
         # print('new_order_id = ', new_order_id)
         # print(new_order_id)
         print('order_id = ', new_order_id)
-        print('stage_id: ', old_stage_id if old_stage_id else '-', ' -> ', new_stage_id)
+        # print('stage_id: ', old_stage_id if old_stage_id else '-', ' -> ', new_stage_id)
+        print('stage_id: ', old_order.stage_id_str if old_order else '-', ' -> ', production.stage_id_str)
 
         # print('res = ', res)
