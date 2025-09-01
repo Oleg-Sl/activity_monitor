@@ -18,7 +18,7 @@ class ProductionOrderRepository(AbstractRepository):
         try:
             stmt = insert(ProductionOrder).values(**data).returning(ProductionOrder.id)
             result = await self.session.execute(stmt)
-            print(data, result)
+            # print(data, result)
 
             await self.session.commit()
             return result.scalar_one()

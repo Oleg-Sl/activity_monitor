@@ -41,8 +41,12 @@ class ProductionOrderService:
             '>=updatedTime': date_start,
             '<=updatedTime': date_end,
         })
+        result = []
         async for order in production_orders:
             await self._save_order_and_stage_history(order)
+            result.append(order)
+
+        print("result = ", len(result))
 
     async def save_orders_to_db(self, production_orders_ids: List[int]):
         production_orders = await self.get_production_orders(production_orders_ids)

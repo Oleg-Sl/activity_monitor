@@ -30,7 +30,8 @@ async def sync_production_orders_task():
         )
 
         start_date = (datetime.datetime.now().date() - datetime.timedelta(days=200)).isoformat()
-        end_date = datetime.datetime.now().date().isoformat()
+        end_date = (datetime.datetime.now().date() + datetime.timedelta(days=2)).isoformat()
+        # end_date = datetime.datetime.now().date().isoformat()
         await service.sync_production(start_date, end_date)
 
 
