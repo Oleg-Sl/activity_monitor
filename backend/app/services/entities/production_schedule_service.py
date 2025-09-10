@@ -37,32 +37,48 @@ class ProductionScheduleService:
         self.stage_repo = stage_repo
         self.calendar_repo = calendar_repo
 
-    async def get_production(self, production_ids: List[int]) -> List[ProductScheduleInSchema]:
+    async def get_production(self, production_ids: List[int]):
         if not production_ids:
-            return []
+            return
 
         try:
             filter_data = {"@id": list(set(production_ids))}
-            raw_productions = [production async for production in self.bitrix_client.get_entities(self.entity_type_id, filter_data)]
-            productions = []
-            errors = []
-
-            for production in raw_productions:
+            async for entity in self.bitrix_client.get_entities(self.entity_type_id, filter_data):
                 try:
-                    # print('ufCrm9_1737034529 = ', production['ufCrm9_1737034529'])
-                    order = ProductScheduleInSchema(**production)
-                    productions.append(order)
+                    production = ProductScheduleInSchema(**entity)
+                    yield production
                 except ValidationError as e:
-                    pprint('Error: ', e)
-                    pprint(production)
-                    errors.append({"data": production, "error": e.errors()})
-            if errors:
-                print('Errors in receiving production of schedule: ', errors)
-            return productions
-            # return [await self._prepare_product_order_data(production) for production in productions]
+                    print(f"Ошибка валидации заказа {entity.get('id')}: {e}")
+                except Exception as e:
+                    print(f"Ошибка обработки заказа {entity.get('id')}: {e}")
         except Exception as e:
-            print(e)
-            return []
+            print("err 2 = ", e)
+            pass
+        # if not production_ids:
+        #     return []
+        #
+        # try:
+        #     filter_data = {"@id": list(set(production_ids))}
+        #     raw_productions = [production async for production in self.bitrix_client.get_entities(self.entity_type_id, filter_data)]
+        #     productions = []
+        #     errors = []
+        #
+        #     for production in raw_productions:
+        #         try:
+        #             # print('ufCrm9_1737034529 = ', production['ufCrm9_1737034529'])
+        #             order = ProductScheduleInSchema(**production)
+        #             productions.append(order)
+        #         except ValidationError as e:
+        #             pprint('Error: ', e)
+        #             pprint(production)
+        #             errors.append({"data": production, "error": e.errors()})
+        #     if errors:
+        #         print('Errors in receiving production of schedule: ', errors)
+        #     return productions
+        #     # return [await self._prepare_product_order_data(production) for production in productions]
+        # except Exception as e:
+        #     print(e)
+        #     return []
 
     async def filter_production_orders(self, filter_data: dict):
         try:
@@ -104,6 +120,7 @@ class ProductionScheduleService:
         async for production in productions:
             await self._save_production_and_stage_history(production)
             result.append(production)
+
         print("result = ", len(result))
 
     # async def _prepare_product_order_data(self, production_order: ProductScheduleInSchema) -> ProductScheduleInSchema:
@@ -116,9 +133,8 @@ class ProductionScheduleService:
     #     return production_order
 
     async def save_productions_to_db(self, production_ids: List[int]):
-        productions = await self.get_production(production_ids)
-        for production in productions:
-            # print('production = ', production)
+        productions = self.get_production(production_ids)
+        async for production in productions:
             await self._save_production_and_stage_history(production)
 
     async def _save_production_and_stage_history(self, production: ProductScheduleInSchema):
