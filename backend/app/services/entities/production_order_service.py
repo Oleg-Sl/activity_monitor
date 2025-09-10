@@ -53,26 +53,36 @@ class ProductionOrderService:
         for order in production_orders:
             await self._save_order_and_stage_history(order)
 
-    async def get_production_orders(self, production_orders_ids: List[int]) -> List[ProductOrderInSchema]:
+    async def get_production_orders(self, production_orders_ids: List[int]):
         if not production_orders_ids:
-            return []
+            return
 
         try:
             filter_data = {"@id": list(set(production_orders_ids))}
-            raw_production_orders = [production_order async for production_order in self.bitrix_client.get_entities(self.entity_type_id, filter_data)]
+            # raw_production_orders = [production_order async for production_order in self.bitrix_client.get_entities(self.entity_type_id, filter_data)]
+            #
+            # production_orders = []
+            # errors = []
+            #
+            # for production_order in raw_production_orders:
+            #     try:
+            #         order = ProductOrderInSchema(**production_order)
+            #         production_orders.append(order)
+            #     except ValidationError as e:
+            #         errors.append({"data": production_order, "error": e.errors()})
+            # return [await self._prepare_product_order_data(production_order) for production_order in production_orders]
 
-            production_orders = []
-            errors = []
-
-            for production_order in raw_production_orders:
+            async for production_order in self.bitrix_client.get_entities(self.entity_type_id, filter_data):
                 try:
                     order = ProductOrderInSchema(**production_order)
-                    production_orders.append(order)
+                    production_data = await self._prepare_product_order_data(order)
+                    yield production_data
                 except ValidationError as e:
-                    errors.append({"data": production_order, "error": e.errors()})
-            return [await self._prepare_product_order_data(production_order) for production_order in production_orders]
+                    print(f"Ошибка валидации заказа {production_order.get('id')}: {e}")
+                except Exception as e:
+                    print(f"Ошибка обработки заказа {production_order.get('id')}: {e}")
         except Exception as e:
-            return []
+            return
 
     async def filter_production_orders(self, filter_data: dict):
         try:
