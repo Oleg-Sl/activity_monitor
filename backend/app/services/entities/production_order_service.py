@@ -51,7 +51,10 @@ class ProductionOrderService:
     async def save_orders_to_db(self, production_orders_ids: List[int]):
         production_orders = self.get_production_orders(production_orders_ids)
         async for order in production_orders:
-            await self._save_order_and_stage_history(order)
+            try:
+                await self._save_order_and_stage_history(order)
+            except Exception as e:
+                print(e)
 
     async def get_production_orders(self, production_orders_ids: List[int]):
         if not production_orders_ids:
