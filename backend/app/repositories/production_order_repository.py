@@ -19,7 +19,6 @@ class ProductionOrderRepository(AbstractRepository):
             stmt = insert(ProductionOrder).values(**data).returning(ProductionOrder.id)
             result = await self.session.execute(stmt)
             # print(data, result)
-
             await self.session.commit()
             return result.scalar_one()
         except SQLAlchemyError as e:
@@ -37,7 +36,8 @@ class ProductionOrderRepository(AbstractRepository):
                     ProductionOrder.entity_type_id == entity_type_id
                 )
                 .values(**data)
-                .returning(ProductionOrder.entity_id)
+                .returning(ProductionOrder.id)
+                # .returning(ProductionOrder.entity_id)
             )
 
             result = await self.session.execute(query)
@@ -48,7 +48,6 @@ class ProductionOrderRepository(AbstractRepository):
         except Exception as e:
             await self.session.rollback()
             print(f"Ошибка при обновлении записи {entity_id}: {e}")
-            return None
     #     try:
     #         stmt = (update(ProductionOrder)
     #                 .where(and_(ProductionOrder.id == id, ProductionOrder.entity_type_id == entity_type_id))

@@ -135,7 +135,10 @@ class ProductionScheduleService:
     async def save_productions_to_db(self, production_ids: List[int]):
         productions = self.get_production(production_ids)
         async for production in productions:
-            await self._save_production_and_stage_history(production)
+            try:
+                await self._save_production_and_stage_history(production)
+            except Exception as e:
+                print(e)
 
     async def _save_production_and_stage_history(self, production: ProductScheduleInSchema):
         # print('production.id = ', production.id)
@@ -145,31 +148,15 @@ class ProductionScheduleService:
         new_stage_id = new_stage.id if new_stage else None
         production.stage_id = new_stage_id
 
-        # old_order = await self.production_repo.get(production.id)
         old_order = await self.production_repo.find_one(production.entity_id, production.entity_type_id)
 
         old_stage_id = old_order.stage_id if old_order else None
 
-        # print("+"*88)
-        # print('old_order = ', old_order)
-        # print('production.entity_type_id = ', production.entity_type_id)
         if old_order:
             new_order_id = await self.production_repo.edit_one(production.entity_id, production.entity_type_id, production.model_dump())
         else:
             new_order_id = await self.production_repo.add_one(production.model_dump())
 
-        # self.history_repo.add_one({
-        #     'production_order_id': production_order_id,
-        #     'stage_id_str': stage_id_str,
-        #     'moved_time': moved_time
-        # })
-
-        # print({
-        #     'production_order_id': new_order_id,
-        #     'stage_id_str': old_order.stage_id_str,
-        #     # 'stage_id_str': production.stage_id_str,
-        #     'moved_time': production.moved_time
-        # })
         if old_order and old_stage_id != new_stage_id:
             res = await self.history_repo.add_one({
                 'production_order_id': new_order_id,
