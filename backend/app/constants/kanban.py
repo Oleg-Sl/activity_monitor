@@ -1,5 +1,5 @@
-from kanban_schema.assembly import ASSEMBLY_KANBAN_SCHEMA
-from kanban_schema.sawing import SAWING_KANBAN_SCHEMA
+from .kanban_schema.assembly import ASSEMBLY_KANBAN_SCHEMA
+from .kanban_schema.sawing import SAWING_KANBAN_SCHEMA
 
 
 KANBAN_SCHEMAS = {
