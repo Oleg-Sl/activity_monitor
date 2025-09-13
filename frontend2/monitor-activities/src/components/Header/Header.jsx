@@ -13,7 +13,7 @@ class Header extends React.Component {
         {/* <Search /> */}
         <div className="kanban__header-info">
           <div></div>
-          <div className="header-brand">tamam</div>
+          <div className="header-brand">tamamm</div>
           {/* <Messages /> */}
           {/* <Notification /> */}
           {/* <Info /> */}

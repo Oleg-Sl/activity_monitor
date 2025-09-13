@@ -1,5 +1,7 @@
 import React from "react";
-import SawingDepartment from "./SawingDepartment.jsx"
+import SawingDepartment from "./SawingDepartment.jsx";
+import AssemblyDepartment from "./AssemblyDepartment.jsx";
+
 import Manage from "./Manage.jsx";
 import Boards from "./Boards.jsx";
 import Reports from "./Reports.jsx";
@@ -12,6 +14,7 @@ class Sidebar extends React.Component {
       <section className="kanban__sidebar">
         <div className="kanban__sidebar-menu">
           <SawingDepartment />
+          <AssemblyDepartment />
           {/* <Manage />
           <Boards />
           <Schedule />

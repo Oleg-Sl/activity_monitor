@@ -224,8 +224,10 @@
   align-items: center;
   color: var(--colorWhite);
   margin: 0 10px;
-  font-size: 32px;
-  font-weight: 300;
+  /* font-size: 32px;
+  font-weight: 300; */
+  font-weight: bold;
+  font-size: 40px;
   justify-content: center;
 }
 

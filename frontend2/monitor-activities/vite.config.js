@@ -10,4 +10,8 @@ export default defineConfig({
   //   loader: 'jsx',
   //   include: /src\/.*\.js$/, // или .ts если TS
   // },
+  build: {
+    outDir: 'dist',
+    assetsInclude: ['**/*.png', '**/*.jpg'],
+  }
 })

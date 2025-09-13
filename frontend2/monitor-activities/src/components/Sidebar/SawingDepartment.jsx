@@ -5,9 +5,10 @@ import { NavLink } from "react-router-dom";
 class SawingDepartment extends React.Component {
   render() {
     return (
-      <NavLink to="/sawing" activeClassName="active-area">
-        <div className="sawing-area">
-            <i className="material-icons">build</i>
+      <NavLink to="/kanban/sawing" activeClassName="active-area">
+        <div className="sawing-area kanban-area">
+            <i className="material-icons">carpenter</i>
+            {/* import CarpenterIcon from '@mui/icons-material/Carpenter'; */}
             <span>Пилка/Сборка</span>
         </div>
       </NavLink>

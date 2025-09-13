@@ -42,7 +42,7 @@
   color: var(--colorLogo);
 }
 
-.sawing-area {
+.sawing-area, .kanban-area {
   height: 100px;
   display: flex;
   justify-content: center;
@@ -52,21 +52,21 @@
   color: var(--colorBarW);
 }
 
-.sawing-area i {
+.sawing-area i, .kanban-area i {
   font-size: 28px;
 }
 
-.sawing-area:hover {
+.sawing-area:hover, .kanban-area:hover {
   color: var(--colorLogo);
 }
 
-.sawing-area span {
+.sawing-area span, .kanban-area span {
   font-weight: 400;
   font-size: 14px;
   margin-top: 5px;
 }
 
-.active-area .sawing-area {
+.active-area .sawing-area, .active-area .kanban-area {
   color: var(--colorLogo);
   border-left: 3px solid var(--colorLogo);
 }
