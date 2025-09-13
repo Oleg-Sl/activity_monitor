@@ -1,64 +1,70 @@
-from .product_schedule import PRODUCTION_SCHEDULE_TYPE_ID
-from .production_order import PRODUCTION_ORDER_TYPE_ID
+from kanban_schema.assembly import ASSEMBLY_KANBAN_SCHEMA
+from kanban_schema.sawing import SAWING_KANBAN_SCHEMA
 
 
-SAWING_AND_ASSEMBLY_KANBAN = [
-    {
-        'stage': 'plan',
-        'title': 'План',
-        'code': 'development',
-        'entity_type_id': PRODUCTION_SCHEDULE_TYPE_ID,
-        'status_id': [
-            'DT179_15:UC_D7DURR',
-        ]
-    },
-    {
-        'stage': 'expecting',
-        'title': 'Ожидание',
-        'code': 'development',
-        'entity_type_id': PRODUCTION_ORDER_TYPE_ID,
-        'status_id': [
-            'DT166_31:UC_HNUB5Y',   # Технолог (№2 - Александр)
-            'DT166_31:CLIENT',      # Технолог (№1 - Валерия)
-        ]
-    },
-    {
-        'stage': 'readysawing',
-        'title': 'Готов к распилу',
-        'code': 'development',
-        'entity_type_id': PRODUCTION_ORDER_TYPE_ID,
-        'status_id': [
-            'DT166_119:NEW'     # Ждет запуска
-        ]
-    },
-    {
-        'stage': 'sawed',
-        'title': 'Пилится',
-        'code': 'sawing',
-        'entity_type_id': PRODUCTION_ORDER_TYPE_ID,
-        'status_id': [
-            'DT166_119:PREPARATION'     # Распиловка
-        ]
-    },
-    {
-        'stage': 'awaitingassembly',
-        'title': 'Ожидает сборку',
-        'code': 'carpentry',
-        'entity_type_id': PRODUCTION_ORDER_TYPE_ID,
-        'status_id': [
-            'DT166_119:UC_HV90U6'   # Ждет Сборки
-        ]
-    },
-    {
-        'stage': 'karskasisgoing',
-        'title': 'Карскас собирается',
-        'code': 'carpentry_assembly',
-        'entity_type_id': PRODUCTION_ORDER_TYPE_ID,
-        'status_id': [
-            'DT166_119:CLIENT'  # Сборка каркасов
-        ]
-    }
-]
+KANBAN_SCHEMAS = {
+    'assembly': ASSEMBLY_KANBAN_SCHEMA,
+    'sawing': SAWING_KANBAN_SCHEMA,
+}
+
+
+# SAWING_AND_ASSEMBLY_KANBAN = [
+#     {
+#         'stage': 'plan',
+#         'title': 'План',
+#         'code': 'development',
+#         'entity_type_id': PRODUCTION_SCHEDULE_TYPE_ID,
+#         'status_id': [
+#             'DT179_15:UC_D7DURR',
+#         ]
+#     },
+#     {
+#         'stage': 'expecting',
+#         'title': 'Ожидание',
+#         'code': 'development',
+#         'entity_type_id': PRODUCTION_ORDER_TYPE_ID,
+#         'status_id': [
+#             'DT166_31:UC_HNUB5Y',   # Технолог (№2 - Александр)
+#             'DT166_31:CLIENT',      # Технолог (№1 - Валерия)
+#         ]
+#     },
+#     {
+#         'stage': 'readysawing',
+#         'title': 'Готов к распилу',
+#         'code': 'development',
+#         'entity_type_id': PRODUCTION_ORDER_TYPE_ID,
+#         'status_id': [
+#             'DT166_119:NEW'     # Ждет запуска
+#         ]
+#     },
+#     {
+#         'stage': 'sawed',
+#         'title': 'Пилится',
+#         'code': 'sawing',
+#         'entity_type_id': PRODUCTION_ORDER_TYPE_ID,
+#         'status_id': [
+#             'DT166_119:PREPARATION'     # Распиловка
+#         ]
+#     },
+#     {
+#         'stage': 'awaitingassembly',
+#         'title': 'Ожидает сборку',
+#         'code': 'carpentry',
+#         'entity_type_id': PRODUCTION_ORDER_TYPE_ID,
+#         'status_id': [
+#             'DT166_119:UC_HV90U6'   # Ждет Сборки
+#         ]
+#     },
+#     {
+#         'stage': 'karskasisgoing',
+#         'title': 'Карскас собирается',
+#         'code': 'carpentry_assembly',
+#         'entity_type_id': PRODUCTION_ORDER_TYPE_ID,
+#         'status_id': [
+#             'DT166_119:CLIENT'  # Сборка каркасов
+#         ]
+#     }
+# ]
 
 #
 # SAWING_AND_ASSEMBLY_ITEMS = {

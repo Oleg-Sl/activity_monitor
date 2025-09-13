@@ -4,7 +4,6 @@ from datetime import datetime
 from typing import Optional
 
 
-
 class EntitySchema(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="ignore")
 

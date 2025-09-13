@@ -1,9 +1,3 @@
-# from .kanban import SAWING_AND_ASSEMBLY_ITEMS
-# from .production_order import PRODUCTION_ORDER_DATA, PRODUCTION_ORDER_TYPE_OF_PRODUCT
-
-
-# STAGES_TYPE_ID = 166
-
 
 TIMEOUT = 5
 

@@ -1,9 +1,7 @@
-print("settings.py loaded")
-
 import logging
 from fastapi import APIRouter
 
-from app.constants.kanban import SAWING_AND_ASSEMBLY_KANBAN
+from app.constants.kanban import KANBAN_SCHEMAS
 from app.api.dependencies import UOWDep
 from app.schemas.credentials import BitrixClientSchema
 from app.db.session import async_session_maker
@@ -37,17 +35,31 @@ async def client_data(
     return {"OK": True}
 
 
-@router.post("/sawing")
-async def get_sawing():
+@router.post("/kanban/{kanban_name}")
+async def get_kanban_data(kanban_name: str):
+    kanban_schema = KANBAN_SCHEMAS[kanban_name]
     async with async_session_maker() as session:
         production_order_repository = ProductionOrderRepository(session)
         work_calendar_repository = WorkCalendarRepository(session)
         work_calendar_service = WorkCaldendarService(work_calendar_repository)
         service = ProductionService(production_order_repository, work_calendar_service)
 
-        # res = [KanbanItemSchema(**stage_kanban) for stage_kanban in SAWING_AND_ASSEMBLY_KANBAN]
-        # print(res)
-        # return res
         return await service.get_kanban_data(
-            [KanbanItemSchema(**stage_kanban) for stage_kanban in SAWING_AND_ASSEMBLY_KANBAN]
+            [KanbanItemSchema(**stage_kanban) for stage_kanban in kanban_schema]
         )
+
+
+# @router.post("/sawing")
+# async def get_sawing():
+#     async with async_session_maker() as session:
+#         production_order_repository = ProductionOrderRepository(session)
+#         work_calendar_repository = WorkCalendarRepository(session)
+#         work_calendar_service = WorkCaldendarService(work_calendar_repository)
+#         service = ProductionService(production_order_repository, work_calendar_service)
+#
+#         # res = [KanbanItemSchema(**stage_kanban) for stage_kanban in SAWING_AND_ASSEMBLY_KANBAN]
+#         # print(res)
+#         # return res
+#         return await service.get_kanban_data(
+#             [KanbanItemSchema(**stage_kanban) for stage_kanban in SAWING_AND_ASSEMBLY_KANBAN]
+#         )
