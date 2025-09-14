@@ -18,7 +18,7 @@ class ProductionSchedule(Base):
     title: Mapped[Optional[str]] = mapped_column(String(255), comment="Название смарт-процесса в битрикс")
     entity_type_id: Mapped[Optional[int]] = mapped_column(Integer, comment="Идентификатор типа смарт процесса")
 
-    deal_id: Mapped[Optional[int]] = mapped_column(Integer, comment="ID_сделки (для монитора)")
+    deal_id: Mapped[Optional[str]] = mapped_column(String(32), comment="ID_сделки (для монитора)")
 
     created_time: Mapped[datetime] = mapped_column(DateTime(timezone=True), comment="Когда создан")
     updated_time: Mapped[datetime] = mapped_column(DateTime(timezone=True), comment="Когда обновлён")

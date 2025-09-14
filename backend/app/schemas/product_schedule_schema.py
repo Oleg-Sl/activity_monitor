@@ -12,7 +12,7 @@ class ProductScheduleInSchema(BaseModel):
     title: str = Field(..., validation_alias='title')
     entity_type_id: int = Field(..., validation_alias='entityTypeId')
 
-    deal_id: int = Field(..., validation_alias='ufCrm9_1757782367')
+    deal_id: str = Field(..., validation_alias='ufCrm9_1757782367')
 
     created_time: Optional[datetime] = Field(..., validation_alias='createdTime')
     updated_time: datetime = Field(..., validation_alias='updatedTime')
