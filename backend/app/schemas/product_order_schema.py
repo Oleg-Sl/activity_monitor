@@ -12,7 +12,7 @@ class ProductOrderInSchema(BaseModel):
     title: str = Field(..., validation_alias='title')
     entity_type_id: int = Field(..., validation_alias='entityTypeId')
 
-    deal_id: str = Field(..., validation_alias='ufCrm21_1757783089')
+    deal_id: Optional[str] = Field(..., validation_alias='ufCrm21_1757783089')
 
     created_time: Optional[datetime] = Field(..., validation_alias='createdTime')
     updated_time: datetime = Field(..., validation_alias='updatedTime')
