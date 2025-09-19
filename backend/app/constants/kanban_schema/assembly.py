@@ -10,7 +10,7 @@ ASSEMBLY_KANBAN_SCHEMA = [
         'code': 'development',
         'entity_type_id': PRODUCTION_SCHEDULE_TYPE_ID,
         'status_id': [
-            'DT179_15:UC_D7DURR',
+            'DT179_15:UC_NQTWXF',   # План для сборки
         ]
     },
     {
